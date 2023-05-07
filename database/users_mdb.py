@@ -3,8 +3,6 @@ import pymongo
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
-else:
-    from config import Config
  
 myclient = pymongo.MongoClient(Config.DATABASE_URI)
 mydb = myclient[Config.DATABASE_NAME]
