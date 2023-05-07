@@ -8,8 +8,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
-else:
-    from config import Config
+
 
 from database.filters_mdb import(
    add_filter,
