@@ -6,8 +6,6 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
-else:
-    from config import Config
 
 from script import Script
 from database.filters_mdb import del_all, find_filter
