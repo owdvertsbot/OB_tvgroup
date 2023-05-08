@@ -7,9 +7,7 @@ Mʏ Nᴀᴍᴇ Is <a href='https://t.me/OB_ANYFILTERBOT'>Sᴄᴀʀʟᴇᴛᴛ</a
 
 
     HELP_MSG = """
-Yᴏᴜ Cᴀɴ'ᴛ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘs, I Oɴʟʏ Wᴏʀᴋ Oɴ <a href='https://t.me/OB_SERIESGROUP'>Oʙ Sᴇʀɪᴇs</a>
-
-Tʜᴇ Oɴʟʏ Tʜɪɴɢ Yᴏᴜ Cᴀɴ Dᴏ Is Jᴏɪɴ <a href='http://t.me/OB_LINK'>Oʙ Lɪɴᴋs</a> 😍
+ʏᴏᴜ ᴄᴀɴ'ᴛ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ. ɪ ᴏɴʟʏ ᴡᴏʀᴋ ɪɴ <a href='https://t.me/OB_SERIESGROUP'>ᴏʙ sᴇʀɪᴇs</a>
 """
 
 
