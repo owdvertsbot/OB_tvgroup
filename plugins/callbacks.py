@@ -42,10 +42,11 @@ async def cb_handler(client, query):
         )
 
         await message.reply_photo(
-            photo=random.choice(https://telegra.ph/file/9639997c9249ce6e472aa.jpg),
-            Script.START_MSG.format(query.from_user.mention),
+            photo=(https://telegra.ph/file/9639997c9249ce6e472aa.jpg),
+            caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=keyboard,
-            disable_web_page_preview=True
+            disable_web_page_preview=True,
+            parse_mode='html'
         )
         return
 
