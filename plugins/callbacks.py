@@ -36,7 +36,7 @@ async def cb_handler(client, query):
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
-            photo=(https://telegra.ph/file/9639997c9249ce6e472aa.jpg),
+            photo=('https://telegra.ph/file/9639997c9249ce6e472aa.jpg'),
             caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=reply_markup,
             quote=True,
