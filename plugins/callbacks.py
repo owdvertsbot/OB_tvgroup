@@ -28,8 +28,15 @@ async def cb_handler(client, query):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("Command Help", callback_data="help_data")
-                ]
+                    InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
+                ],
+                [
+                    InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
+                    InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
+                ],
+                [
+                    InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
+                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
             ]
         )
 
@@ -45,13 +52,9 @@ async def cb_handler(client, query):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("How to Deploy?", url="https://youtu.be/hkmc3e7U7R4"),
-                    InlineKeyboardButton("About Me", callback_data="about_data")
-                ],
-                [
-                    InlineKeyboardButton("BOT Channel", url="https://t.me/TroJanzHEX"),
-                    InlineKeyboardButton("Support Group", url="https://t.me/TroJanzSupport")
-                ]
+                    InlineKeyboardButton("BACK", callback_data="start_data"),
+                    InlineKeyboardButton("CLOSE", callback_data="close_data"),
+                ]                
             ]
         )
 
@@ -66,10 +69,6 @@ async def cb_handler(client, query):
         await query.answer()
         keyboard = InlineKeyboardMarkup(
             [
-                [
-                    InlineKeyboardButton(
-                        "SOURCE CODE", url="https://github.com/TroJanzHEX/Unlimited-Filter-Bot")
-                ],
                 [
                     InlineKeyboardButton("BACK", callback_data="help_data"),
                     InlineKeyboardButton("CLOSE", callback_data="close_data"),
