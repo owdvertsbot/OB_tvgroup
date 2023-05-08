@@ -8,7 +8,6 @@ if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
 
 from script import Script
-from sample_config import PICS
 from database.filters_mdb import del_all, find_filter
 
 from database.connections_mdb import(
@@ -37,7 +36,7 @@ async def cb_handler(client, query):
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.reply_photo(
-            photo=(PICS),
+            photo=PICS,
             caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=reply_markup,
             quote=True,
