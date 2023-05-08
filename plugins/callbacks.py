@@ -39,8 +39,7 @@ async def cb_handler(client, query):
             photo=Config.PICS,
             caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=reply_markup,
-            quote=True,
-            parse_mode='default'
+            quote=True
         )
         return
 
