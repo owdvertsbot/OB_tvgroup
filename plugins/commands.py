@@ -120,7 +120,6 @@ async def bot_status(client,message):
         userstats = f"> __**{users} users have interacted with your bot!**__\n\n"
     else:
         userstats = ""
-        )
 
 
 @trojanz.on_message(filters.command('start') & filters.private)
