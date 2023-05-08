@@ -8,6 +8,7 @@ if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
 
 from script import Script
+from sample_config import PICS
 from database.filters_mdb import del_all, find_filter
 
 from database.connections_mdb import(
