@@ -43,6 +43,10 @@
             "value": "no",
             "required": false
         },
+        "PICS": {
+            "description": "Add some telegraph link of pictures .",
+            "required": false
+        },
         "HEROKU_API_KEY": {
             "description": "To check dyno status. Go to https://dashboard.heroku.com/account, scroll down and press Reveal API",
             "value": "None",
