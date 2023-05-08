@@ -35,7 +35,8 @@ async def cb_handler(client, query):
             InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.reply_photo(
+        await Message.reply_photo(
+            chat_id=message.chat.id,
             photo=(PICS),
             caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=reply_markup,
