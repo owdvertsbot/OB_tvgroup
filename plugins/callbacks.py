@@ -25,27 +25,21 @@ async def cb_handler(client, query):
 
     if query.data == "start_data":
         await query.answer()
-        keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
-                ],
-                [
-                    InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
-                    InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
-                ],
-                [
-                    InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
-                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
-                ]
-            ]
-        )
-
+        buttons = [[
+            InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
+        ],[
+            InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
+            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
+        ],[
+            InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
+            InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
             photo=(https://telegra.ph/file/9639997c9249ce6e472aa.jpg),
             caption=Script.START_MSG.format(query.from_user.mention),
-            reply_markup=keyboard,
-            disable_web_page_preview=True,
+            reply_markup=reply_markup,
+            quote=True,
             parse_mode='html'
         )
         return
