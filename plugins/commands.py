@@ -126,7 +126,6 @@ async def start(client, message):
     await message.reply_photo(
         photo=Config.PICS,
         caption=Script.START_MSG.format(message.from_user.mention),
-        disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [[
                 InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
