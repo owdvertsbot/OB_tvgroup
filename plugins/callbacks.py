@@ -21,7 +21,7 @@ from database.connections_mdb import(
 
 
 @trojanz.on_callback_query()
-async def cb_handler(client, message):
+async def cb_handler(client, query):
 
     if query.data == "start_data":
         await query.answer()
@@ -36,7 +36,7 @@ async def cb_handler(client, message):
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
-            photo=('https://telegra.ph/file/9639997c9249ce6e472aa.jpg'),
+            photo=(PICS),
             caption=Script.START_MSG.format(query.from_user.mention),
             reply_markup=reply_markup,
             quote=True,
