@@ -3,7 +3,6 @@ import math
 import json
 import time
 import shutil
-import requests
 
 from pyrogram import filters
 from pyrogram import Client as trojanz
