@@ -124,7 +124,7 @@ async def bot_status(client,message):
 @trojanz.on_message(filters.command('start') & filters.private)
 async def start(client, message):
     await message.reply_photo(
-        photo=Script.PICS
+        photo=Script.PICS,
         caption=Script.START_MSG.format(message.from_user.mention),
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
