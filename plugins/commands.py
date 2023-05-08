@@ -123,23 +123,23 @@ async def bot_status(client,message):
 
 @trojanz.on_message(filters.command('start') & filters.private)
 async def start(client, message):
-    await message.answer()
-        buttons = [[
-            InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
-        ],[
-            InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
-            InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
-        ],[
-            InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
-            InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
-        ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.message.reply_photo(
-            photo=Config.PICS,
-            caption=Script.START_MSG.format(query.from_user.mention),
-            reply_markup=reply_markup,
-            quote=True
-        )
+    await message.reply_photo(
+        photo=Script.PICS
+        caption=Script.START_MSG.format(message.from_user.mention),
+        disable_web_page_preview=True,
+        reply_markup=InlineKeyboardMarkup(
+            [[
+                InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
+            ],[
+                InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
+                InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
+            ],[
+                InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
+                InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
+            ]]
+        ),
+        reply_to_message_id=message.id
+    )
     if Config.SAVE_USER == "yes":
         try:
             await add_user(
