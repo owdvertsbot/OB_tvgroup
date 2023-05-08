@@ -21,10 +21,10 @@ from database.connections_mdb import(
 
 
 @trojanz.on_callback_query()
-async def cb_handler(client, query):
+async def cb_handler(client, message):
 
-    if query.data == "start_data":
-        await query.answer()
+    if message.data == "start_data":
+        await message.answer()
         buttons = [[
             InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
         ],[
@@ -37,7 +37,7 @@ async def cb_handler(client, query):
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
             photo=('https://telegra.ph/file/9639997c9249ce6e472aa.jpg'),
-            caption=Script.START_MSG.format(query.from_user.mention),
+            caption=Script.START_MSG.format(message.from_user.mention),
             reply_markup=reply_markup,
             quote=True,
             parse_mode='html'
