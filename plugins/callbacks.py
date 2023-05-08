@@ -37,6 +37,7 @@ async def cb_handler(client, query):
                 [
                     InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
                     InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
+                ]
             ]
         )
 
@@ -52,8 +53,8 @@ async def cb_handler(client, query):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("BACK", callback_data="start_data"),
-                    InlineKeyboardButton("CLOSE", callback_data="close_data"),
+                    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="start_data"),
+                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data"),
                 ]                
             ]
         )
@@ -70,8 +71,8 @@ async def cb_handler(client, query):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("BACK", callback_data="help_data"),
-                    InlineKeyboardButton("CLOSE", callback_data="close_data"),
+                    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="help_data"),
+                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data"),
                 ]                
             ]
         )
