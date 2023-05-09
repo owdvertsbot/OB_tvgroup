@@ -200,7 +200,7 @@ async def cb_handler(client, query):
         mkinact = await make_inactive(str(user_id))
 
         if mkinact:
-            await query.message.edit_text(
+        await query.message.edit_text(
                 f"Disconnected from **{title}**",
                 parse_mode="md"
             )
