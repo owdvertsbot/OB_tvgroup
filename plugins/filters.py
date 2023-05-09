@@ -27,12 +27,9 @@ from plugins.helpers import parser,split_quotes
 
 @Client.on_message(filters.command(['filter', 'add',]) & filters.incoming)
 async def addfilter(client, message):
-    
-    userid = message.from_user.id if message.from_user else None
-    if not userid:
-        return await message.ryply(You are anonymous admin. Use /connect {message.chat.id} in PM")
+    userid = message.from_user.id
     chat_type = message.chat.type
-    arg = message.text.split(None, 1)
+    args = message.text.html.split(None, 1)
 
     if chat_type == enums.ChatType.PRIVATE:
         grpid = await active_connection(str(userid))
