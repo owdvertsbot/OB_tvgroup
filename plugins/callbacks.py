@@ -35,11 +35,9 @@ async def cb_handler(client, query):
             InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.reply_photo(
-            photo=Config.PICS,
-            caption=Script.START_MSG.format(query.from_user.mention),
-            reply_markup=reply_markup,
-            quote=True
+        await await query.message.edit_media(
+            InputMediaPhoto=Config.PICS, Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML),
+            reply_markup=reply_markup
         )
         return
 
