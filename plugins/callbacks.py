@@ -27,7 +27,6 @@ from database.connections_mdb import(
 async def cb_handler(client, query):
 
     if query.data == "start_data":
-        await query.answer()
         buttons = [[
             InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
         ],[
@@ -38,7 +37,7 @@ async def cb_handler(client, query):
             InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.edit_message_media(chat_id=query.from_user.id, reply_to_message_id=message.id,
+        await query.edit_message_media(
             InputMediaPhoto(("https://telegra.ph/file/9639997c9249ce6e472aa.jpg"), Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML),
             reply_markup=reply_markup,
         )
