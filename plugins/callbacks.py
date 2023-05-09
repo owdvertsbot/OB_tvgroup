@@ -2,7 +2,7 @@ import os
 import ast
 
 from pyrogram import Client as trojanz, filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
