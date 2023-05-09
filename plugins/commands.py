@@ -140,16 +140,9 @@ async def who_is(client, message):
 
 @Client.on_message((filters.private | filters.group) & filters.command('status'))
 async def bot_status(client,message):
-    if str(message.from_user.id) not in Config.AUTH_USERS:
-        return
-
-    chats, filters = await filter_stats()
-
-    if Config.SAVE_USER == "yes":
-        users = await all_users()
-        userstats = f"> __**{users} users have interacted with your bot!**__\n\n"
-    else:
-        userstats = ""
+    msg = await client.send_message(chat_id=message.chat.id, text="Please Wait...!")
+    users = await full_userbase()
+    await msg.edit(f"{len(users)} users are using this bot")
 
 
 @trojanz.on_message(filters.command('start') & filters.private)
