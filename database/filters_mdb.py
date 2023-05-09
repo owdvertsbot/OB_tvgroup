@@ -106,14 +106,12 @@ async def filter_stats():
 
     if "CONNECTION" in collections:
         collections.remove("CONNECTION")
-    if "USERS" in collections:
-        collections.remove("USERS")
 
     totalcount = 0
     for collection in collections:
         mycol = mydb[collection]
         count = mycol.count()
-        totalcount = totalcount + count
+        totalcount += count
 
     totalcollections = len(collections)
 
