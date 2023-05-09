@@ -5,8 +5,11 @@ import time
 import shutil
 
 from pyrogram import filters
-from pyrogram import Client, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import Client, filters, enums
+from pyrogram.errors import ChatAdminRequired, FloodWait
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from utils import extract_user, get_file_id, get_poster, last_online
+from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
