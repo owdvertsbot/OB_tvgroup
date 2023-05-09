@@ -1,6 +1,7 @@
 import os
 import re
 import io
+import pymongo
 import pyrogram
 
 from pyrogram import filters, Client, enums
@@ -9,7 +10,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
 
-
+    
 from database.filters_mdb import(
    add_filter,
    find_filter,
@@ -23,6 +24,8 @@ from database.users_mdb import add_user, all_users
 
 from plugins.helpers import parser,split_quotes
 
+myclient = pymongo.MongoClient(Config.DATABASE_URI)
+mydb = myclient["ManualFilters"]
 
 
 @Client.on_message(filters.command(['filter', 'add',]) & filters.incoming)
