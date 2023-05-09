@@ -145,7 +145,7 @@ async def bot_status(client,message):
     await msg.edit(f"{len(users)} users are using this bot")
 
 
-@trojanz.on_message(filters.command('start') & filters.private)
+@Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
     await message.reply_photo(
         photo=Config.PICS,
