@@ -136,7 +136,9 @@ async def connections(client, message):
                     )
                 ]
             )
-        if buttons:
+        except:
+            pass
+    if buttons:
         await message.reply_text(
             "Your connected group details ;\n\n",
             reply_markup=InlineKeyboardMarkup(buttons),
