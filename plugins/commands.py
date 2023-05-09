@@ -78,7 +78,7 @@ async def who_is(client, message):
         "`Processing user info...`"
     )
     from_user = None
-    from_user_id, _ = extract_user(message)
+    from_user_id = extract_user(message)
     try:
         from_user = await client.get_users(from_user_id)
     except Exception as error:
