@@ -8,7 +8,6 @@ import re
 import os
 from datetime import datetime
 from typing import List
-from database.users_chats_db import db
 import requests, aiohttp 
 
 logger = logging.getLogger(__name__)
