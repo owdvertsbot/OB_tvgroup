@@ -194,23 +194,26 @@ async def cb_handler(client, query):
     elif "disconnect" in query.data:
         await query.answer()
 
-        title = query.data.split(":")[2]
+        group_id = query.data.split(":")[1]
+
+        hr = await client.get_chat(int(group_id))
+
+        title = hr.title
         user_id = query.from_user.id
 
         mkinact = await make_inactive(str(user_id))
 
         if mkinact:
-        await query.message.edit_text(
+            await query.message.edit_text(
                 f"Disconnected from **{title}**",
-                parse_mode="md"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
-            return
         else:
             await query.message.edit_text(
-                f"Some error occured!!",
-                parse_mode="md"
+                f"Some error occurred!!",
+                parse_mode=enums.ParseMode.MARKDOWN
             )
-            return
+        return
     elif "deletecb" in query.data:
         await query.answer()
 
@@ -223,13 +226,12 @@ async def cb_handler(client, query):
             await query.message.edit_text(
                 "Successfully deleted connection"
             )
-            return
         else:
             await query.message.edit_text(
-                f"Some error occured!!",
-                parse_mode="md"
+                f"Some error occurred!!",
+                parse_mode=enums.ParseMode.MARKDOWN
             )
-            return
+        return
     
     elif query.data == "backcb":
         await query.answer()
@@ -248,10 +250,7 @@ async def cb_handler(client, query):
                 ttl = await client.get_chat(int(groupid))
                 title = ttl.title
                 active = await if_active(str(userid), str(groupid))
-                if active:
-                    act = " - ACTIVE"
-                else:
-                    act = ""
+                act = " - ACTIVE" if active else ""
                 buttons.append(
                     [
                         InlineKeyboardButton(
@@ -270,10 +269,10 @@ async def cb_handler(client, query):
     elif "alertmessage" in query.data:
         grp_id = query.message.chat.id
         i = query.data.split(":")[1]
-        keyword = query.data.split(":")[2]
-        reply_text, btn, alerts, fileid = await find_filter(grp_id, keyword)
+        keyword = query.data.split(":")[2]        
+        reply_text, btn, alerts, fileid = await find_filter(grp_id, keyword)       
         if alerts is not None:
             alerts = ast.literal_eval(alerts)
             alert = alerts[int(i)]
             alert = alert.replace("\\n", "\n").replace("\\t", "\t")
-            await query.answer(alert,show_alert=True)
+            await query.answer(alert, show_alert=True)
