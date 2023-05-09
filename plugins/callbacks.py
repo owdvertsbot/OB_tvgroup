@@ -39,9 +39,10 @@ async def cb_handler(client, query):
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.edit_message_media(chat_id, message_id,
-            InputMediaPhoto("https://telegra.ph/file/9639997c9249ce6e472aa.jpg"), Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML),
+            InputMediaPhoto("https://telegra.ph/file/9639997c9249ce6e472aa.jpg"), Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML,
+            reply_markup=reply_markup,                           
             quote=True
-        ))
+        )
         return
 
     elif query.data == "help_data":
