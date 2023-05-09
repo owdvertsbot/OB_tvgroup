@@ -4,7 +4,7 @@ if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
 
 
-from pyrogram import filters, Client
+from pyrogram import filters, Client, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from database.connections_mdb import add_connection, all_connections, if_active, delete_connection
@@ -12,11 +12,14 @@ from database.connections_mdb import add_connection, all_connections, if_active,
 
 
 @Client.on_message((filters.private | filters.group) & filters.command(Config.CONNECT_COMMAND))
-async def addconnection(client,message):
-    userid = message.from_user.id
+async def addconnection(client, message):
+    userid = message.from_user.id if message.from_user else None
+    if not userid:
+        return await message.reply(f"You are anonymous admin. Use /connect {message.chat.id} in PM")
     chat_type = message.chat.type
 
-    if chat_type == "private":
+
+    if chat_type == enums.ChatType.PRIVATE:
         try:
             cmd, group_id = message.text.split(" ", 1)
         except:
@@ -28,14 +31,16 @@ async def addconnection(client,message):
             )
             return
 
-    elif (chat_type == "group") or (chat_type == "supergroup"):
+    elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         group_id = message.chat.id
 
     try:
         st = await client.get_chat_member(group_id, userid)
-        if (st.status == "administrator") or (st.status == "creator") or (str(userid) in Config.AUTH_USERS):
-            pass
-        else:
+        if (
+                st.status != enums.ChatMemberStatus.ADMINISTRATOR
+                and st.status != enums.ChatMemberStatus.OWNER
+                and userid not in Config.AUTH_USERS
+        ):
             await message.reply_text("You should be an admin in Given group!", quote=True)
             return
     except Exception as e:
@@ -48,7 +53,7 @@ async def addconnection(client,message):
 
     try:
         st = await client.get_chat_member(group_id, "me")
-        if st.status == "administrator":
+        if st.status == enums.ChatMemberStatus.ADMINISTRATOR:
             ttl = await client.get_chat(group_id)
             title = ttl.title
 
@@ -57,13 +62,13 @@ async def addconnection(client,message):
                 await message.reply_text(
                     f"Sucessfully connected to **{title}**\nNow manage your group from my pm !",
                     quote=True,
-                    parse_mode="md"
+                    parse_mode=enums.ParseMode.MARKDOWN
                 )
-                if (chat_type == "group") or (chat_type == "supergroup"):
+                if chat_type in ["group", "supergroup"]:
                     await client.send_message(
                         userid,
                         f"Connected to **{title}** !",
-                        parse_mode="md"
+                        parse_mode=enums.ParseMode.MARKDOWN
                     )
             else:
                 await message.reply_text(
@@ -74,10 +79,7 @@ async def addconnection(client,message):
             await message.reply_text("Add me as an admin in group", quote=True)
     except Exception as e:
         print(e)
-        await message.reply_text(
-            "Some error occured! Try again later.",
-            quote=True
-        )
+        await message.reply_text('Some error occurred! Try again later.', quote=True)
         return
 
 
