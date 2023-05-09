@@ -3,6 +3,9 @@ import ast
 
 from pyrogram import Client as trojanz, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
+from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
+from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
+
 
 if bool(os.environ.get("WEBHOOK", False)):
     from sample_config import Config
@@ -36,7 +39,7 @@ async def cb_handler(client, query):
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.edit_message_media(
-            InputMediaPhoto=Config.PICS, Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML),
+            InputMediaPhoto = Config.PICS, Script.START_MSG.format(query.from_user.mention), enums.ParseMode.HTML),
             reply_markup=reply_markup
         )
         return
