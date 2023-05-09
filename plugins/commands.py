@@ -5,7 +5,7 @@ import time
 import shutil
 
 from pyrogram import filters
-from pyrogram import Client as trojanz
+from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 if bool(os.environ.get("WEBHOOK", False)):
