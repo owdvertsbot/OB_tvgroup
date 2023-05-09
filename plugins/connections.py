@@ -83,19 +83,25 @@ async def addconnection(client, message):
         return
 
 
-@Client.on_message((filters.private | filters.group) & filters.command(Config.DISCONNECT_COMMAND))
-async def deleteconnection(client,message):
-    userid = message.from_user.id
+@Client.on_message((filters.private | filters.group) & filters.command('disconnect'))
+async def deleteconnection(client, message):
+    userid = message.from_user.id if message.from_user else None
+    if not userid:
+        return await message.reply(f"You are anonymous admin. Use /connect {message.chat.id} in PM")
     chat_type = message.chat.type
 
-    if chat_type == "private":
+    if chat_type == enums.ChatType.PRIVATE:
         await message.reply_text("Run /connections to view or disconnect from groups!", quote=True)
 
-    elif (chat_type == "group") or (chat_type == "supergroup"):
+    elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         group_id = message.chat.id
 
         st = await client.get_chat_member(group_id, userid)
-        if not ((st.status == "administrator") or (st.status == "creator") or (str(userid) in Config.AUTH_USERS)):
+        if (
+                st.status != enums.ChatMemberStatus.ADMINISTRATOR
+                and st.status != enums.ChatMemberStatus.OWNER
+                and str(userid) not in Config.AUTH_USERS
+        ):
             return
 
         delcon = await delete_connection(str(userid), str(group_id))
@@ -106,7 +112,7 @@ async def deleteconnection(client,message):
 
 
 @Client.on_message(filters.private & filters.command(["connections"]))
-async def connections(client,message):
+async def connections(client, message):
     userid = message.from_user.id
 
     groupids = await all_connections(str(userid))
@@ -122,22 +128,22 @@ async def connections(client,message):
             ttl = await client.get_chat(int(groupid))
             title = ttl.title
             active = await if_active(str(userid), str(groupid))
-            if active:
-                act = " - ACTIVE"
-            else:
-                act = ""
+            act = " - ACTIVE" if active else ""
             buttons.append(
                 [
                     InlineKeyboardButton(
-                        text=f"{title}{act}", callback_data=f"groupcb:{groupid}:{title}:{act}"
+                        text=f"{title}{act}", callback_data=f"groupcb:{groupid}:{act}"
                     )
                 ]
             )
-        except:
-            pass
-    if buttons:
+        if buttons:
         await message.reply_text(
             "Your connected group details ;\n\n",
             reply_markup=InlineKeyboardMarkup(buttons),
+            quote=True
+        )
+    else:
+        await message.reply_text(
+            "There are no active connections!! Connect to some groups first.",
             quote=True
         )
