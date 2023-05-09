@@ -4,3 +4,4 @@ umongo
 dnspython
 requests==2.28.2
 aiohttp==3.8.3
+pymongo
