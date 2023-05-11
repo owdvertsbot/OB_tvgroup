@@ -1,8 +1,5 @@
 import os
 import pyrogram
-from info import API_ID, API_HASH, BOT_TOKEN,
-import os
-import pyrogram
 from info import BOT_TOKEN, API_ID, API_HASH
 
 if __name__ == "__main__" :
