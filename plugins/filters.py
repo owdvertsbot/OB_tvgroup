@@ -10,7 +10,7 @@ from database.filters_mdb import(
 
 from database.connections_mdb import active_connection
 from plugins.helpers import get_file_id, parser, split_quotes
-from sample_config import Config
+from info import ADMINS
 
 
 
