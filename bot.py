@@ -1,7 +1,7 @@
 import os
 import pyrogram
 
-from sample_config import Config
+from info import API_ID, API_HASH, BOT_TOKEN,
 
 
 if __name__ == "__main__" :
@@ -10,11 +10,10 @@ if __name__ == "__main__" :
     )
     app = pyrogram.Client(
         "filter bot",
-        bot_token=Config.TG_BOT_TOKEN,
-        api_id=Config.API_ID,
-        api_hash=Config.API_HASH,
+        bot_token=BOT_TOKEN,
+        api_id=API_ID,
+        api_hash=API_HASH,
         plugins=plugins,
         workers=300
     )
-    Config.AUTH_USERS.add(str(680815375))
     app.run()
