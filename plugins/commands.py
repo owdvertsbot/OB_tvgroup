@@ -79,9 +79,10 @@ async def start(client, message):
                 InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
             ]]
         ),
-        reply_to_message_id=message.id
+        parse_mode=enums.ParseMode.HTML,
+        quote=True
     )
-    if Config.SAVE_USER == "yes":
+    if SAVE_USER == "yes":
         try:
             await add_user(
                 str(message.from_user.id),
