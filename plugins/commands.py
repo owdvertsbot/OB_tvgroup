@@ -4,6 +4,7 @@ import json
 import time
 import shutil
 
+import urllib.request
 from datetime import datetime
 from pyrogram import filters
 from pyrogram import Client, filters, enums
@@ -65,8 +66,10 @@ async def showid(client, message):
 
 @Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
+    with urllib.request.urlopen("https://telegra.ph/file/9639997c9249ce6e472aa.jpg") as url:
+        buffer = url.read()
     await message.reply_photo(
-        photo=PICS,
+        photo=buffer,
         caption=Script.START_MSG.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(
             [[
