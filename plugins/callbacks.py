@@ -9,7 +9,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerId
 
 
 from script import Script
-from info ADMINS
+from info import ADMINS
 from database.filters_mdb import del_all, find_filter
 
 from database.connections_mdb import(
