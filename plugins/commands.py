@@ -12,7 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from script import Script
-from plugins import PICS
+import PICS
 from info import SAVE_USER
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
