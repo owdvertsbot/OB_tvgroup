@@ -1,12 +1,10 @@
-import os
-import re
 import pymongo
-
 from pyrogram import enums
+from sample_config import Config
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
 
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
- 
 myclient = pymongo.MongoClient(Config.DATABASE_URI)
 mydb = myclient[Config.DATABASE_NAME]
 
@@ -97,10 +95,7 @@ async def count_filters(group_id):
     mycol = mydb[str(group_id)]
 
     count = mycol.count()
-    if count == 0:
-        return False
-    else:
-        return count
+    return False if count == 0 else count
 
 
 async def filter_stats():
