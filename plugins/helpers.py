@@ -1,7 +1,14 @@
 import re
+import os
+import asyncio
 
-from typing import List
-from pyrogram.types import InlineKeyboardButton
+from typing import List, Union
+from pyrogram import enums
+from pyrogram.types import Message, InlineKeyboardButton
+from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
+from bs4 import BeautifulSoup
+import requests
+from datetime import datetime
 
 
 
@@ -109,6 +116,22 @@ def remove_escapes(text: str) -> str:
         counter += 1
     return res
 
+def get_file_id(msg: Message):
+    if msg.media:
+        for message_type in (
+            "photo",
+            "animation",
+            "audio",
+            "document",
+            "video",
+            "video_note",
+            "voice",
+            "sticker"
+        ):
+            obj = getattr(msg, message_type)
+            if obj:
+                setattr(obj, "message_type", message_type)
+                return obj
 
 def humanbytes(size):
     if not size:
