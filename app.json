@@ -13,7 +13,7 @@
             "description": "No need to change this field!",
             "value": "ANYTHING"
         },
-        "TG_BOT_TOKEN": {
+        "BOT_TOKEN": {
             "description": "Your Telegram Bot Token from @BotFather",
             "value": ""
         },
@@ -26,6 +26,10 @@
             "value": ""
         },
         "AUTH_USERS": {
+            "description": "ID of users that can use the bot commands",
+            "value": ""
+        },
+        "ADMINS": {
             "description": "ID of users that can use the bot commands",
             "value": ""
         },
