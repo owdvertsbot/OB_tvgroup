@@ -66,8 +66,8 @@ async def showid(client, message):
 
 @Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
-    with urllib.request.urlopen(PICS) as url:
-        buffer = url.read(PICS)
+    with urllib.request.urlopen("https://i.ibb.co/t8LdJwf/PICS.jpg") as url:
+        buffer = url.read()
     await message.reply_photo(
         photo=buffer,
         caption=Script.START_MSG.format(message.from_user.mention),
