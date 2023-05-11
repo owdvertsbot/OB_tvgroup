@@ -65,10 +65,14 @@ async def showid(client, message):
         )
 
 
+import urllib.request
+from io import BytesIO
+
 @Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
     with urllib.request.urlopen("https://i.ibb.co/t8LdJwf/PICS.jpg") as url:
-        buffer = url.read()
+        image_data = url.read()
+    buffer = BytesIO(image_data)
     await message.reply_photo(
         photo=buffer,
         caption=Script.START_MSG.format(message.from_user.mention),
