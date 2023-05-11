@@ -8,10 +8,8 @@ from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidD
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 
 
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
-
 from script import Script
+from info 
 from database.filters_mdb import del_all, find_filter
 
 from database.connections_mdb import(
@@ -113,7 +111,7 @@ async def cb_handler(client, query):
             return
 
         st = await client.get_chat_member(grp_id, userid)
-        if (st.status == "creator") or (str(userid) in Config.AUTH_USERS):    
+        if (st.status == "creator") or (str(userid) in ADMINS):    
             await del_all(query.message, grp_id, title)
         else:
             await query.answer("You need to be Group Owner or an Auth User to do that!",show_alert=True)
@@ -129,7 +127,7 @@ async def cb_handler(client, query):
         elif (chat_type == "group") or (chat_type == "supergroup"):
             grp_id = query.message.chat.id
             st = await client.get_chat_member(grp_id, userid)
-            if (st.status == "creator") or (str(userid) in Config.AUTH_USERS):
+            if (st.status == "creator") or (str(userid) in ADMINS):
                 await query.message.delete()
                 try:
                     await query.message.reply_to_message.delete()
