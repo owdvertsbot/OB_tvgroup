@@ -68,6 +68,7 @@ async def start(client, message):
     await message.reply_photo(
         photo=PICS,
         caption=Script.START_MSG.format(message.from_user.mention),
+        parse_mode=enums.ParseMode.HTML,
         reply_markup=InlineKeyboardMarkup(
             [[
                 InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
