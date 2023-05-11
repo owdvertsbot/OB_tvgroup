@@ -11,11 +11,8 @@ from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
-if bool(os.environ.get("WEBHOOK", False)):
-    from sample_config import Config
-
-
 from script import Script
+from info import PICS, SAVE_USER
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
@@ -69,7 +66,7 @@ async def showid(client, message):
 @Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
     await message.reply_photo(
-        photo=Config.PICS,
+        photo=PICS,
         caption=Script.START_MSG.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(
             [[
@@ -84,7 +81,7 @@ async def start(client, message):
         ),
         reply_to_message_id=message.id
     )
-    if Config.SAVE_USER == "yes":
+    if SAVE_USER == "yes":
         try:
             await add_user(
                 str(message.from_user.id),
