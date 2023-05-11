@@ -12,8 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from script import Script
-import PICS
-from info import SAVE_USER
+from info import SAVE_USER, PICS
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
@@ -69,7 +68,6 @@ async def start(client, message):
     await message.reply_photo(
         photo=PICS,
         caption=Script.START_MSG.format(message.from_user.mention),
-        parse_mode=enums.ParseMode.HTML,
         reply_markup=InlineKeyboardMarkup(
             [[
                 InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
@@ -83,7 +81,7 @@ async def start(client, message):
         ),
         reply_to_message_id=message.id
     )
-    if SAVE_USER == "yes":
+    if Config.SAVE_USER == "yes":
         try:
             await add_user(
                 str(message.from_user.id),
@@ -93,4 +91,3 @@ async def start(client, message):
             )
         except:
             pass
-
