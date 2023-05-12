@@ -25,7 +25,11 @@
             "description": "Your APP ID from my.telegram.org or @UseTGXBot",
             "value": ""
         },
-        "AUTH_USERS": {
+        "API_ID": {
+            "description": "Your APP ID from my.telegram.org or @UseTGXBot",
+            "value": ""
+        },
+        "THETVDB_API_KEY": {
             "description": "ID of users that can use the bot commands",
             "value": ""
         },
