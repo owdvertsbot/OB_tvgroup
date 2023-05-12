@@ -5,13 +5,14 @@ import json
 import time
 import shutil
 import requests
+import pyrogram
 import urllib.request
 import urllib.parse
 
 from datetime import datetime
 from pyrogram import filters
 from pyrogram import Client, filters, enums
-from pyrogram.errors import ChatAdminRequired, FloodWait
+from pyrogram.errors import ChatAdminRequired, FloodWait, BadRequest
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
@@ -108,19 +109,25 @@ async def start(client, message):
         
 # Function to retrieve TV show information and landscape poster
 def get_tvshow_info(name):
-    # Replace <API_KEY> with your TheTVDB.com API key
-    url = f'https://api.thetvdb.com/search/series?name={name}'
-    headers = {'Content-Type': 'application/json'}
-    data = {'apikey': 'fe9c05b0-2099-4c03-b0dd-91ee77dfa192'}
-    response = requests.post(url, headers=headers, data=json.dumps(data)).json()
-    if response['data']:
-        tv_show = response['data'][0]
-        title = tv_show['seriesName']
-        overview = tv_show['overview']
-        poster_path = tv_show['banner']
-        if poster_path:
-            poster_url = f'https://www.thetvdb.com/banners/{poster_path}'
-            return title, overview, poster_url
+    try:
+        url = f'https://api.thetvdb.com/search/series?name={name}'
+        headers = {'Content-Type': 'application/json'}
+        data = {'apikey': THETVDB_API_KEY}
+        response = requests.post(url, headers=headers, data=json.dumps(data)).json()
+        if response['data']:
+            tv_show = response['data'][0]
+            title = tv_show['seriesName']
+            overview = tv_show['overview']
+            poster_path = tv_show['banner']
+            if poster_path:
+                poster_url = f'https://www.thetvdb.com/banners/{poster_path}'
+                return title, overview, poster_url
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+    except KeyError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
     return None
 
 # Function to check if message is a TV show name
@@ -130,6 +137,7 @@ def is_tvshow(message_text):
     return re.search(regex, message_text)
 
 # on_message function to handle incoming messages
+@Client.on_message(filters.text & ~filters.edited)
 async def on_message(client, message):
     # Check if message is a TV show name
     if is_tvshow(message.text):
@@ -138,5 +146,17 @@ async def on_message(client, message):
         if tvshow_info:
             title, overview, poster_url = tvshow_info
             # Send TV show information and landscape poster
-            await message.reply_text(f'{title}\n\n{overview}')
-            await message.reply_photo(photo=poster_url)
+            try:
+                await message.reply_text(f'{title}\n\n{overview}')
+                await message.reply_photo(photo=poster_url)
+            except pyrogram.errors.exceptions.bad_request_400.PhotoInvalidDimensions:
+                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because it's dimensions are invalid.")
+            except pyrogram.errors.exceptions.bad_request_400.PhotoContentUrlEmpty:
+                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is empty.")
+            except pyrogram.errors.exceptions.bad_request_400.PhotoIdInvalid:
+                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the photo ID is invalid.")
+            except pyrogram.errors.exceptions.bad_request_400.PhotoInvalid:
+                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the photo is invalid.")
+            except pyrogram.errors.exceptions.bad_request_400.PhotoContentUrlInvalid:
+                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is invalid.")
+            except pyrogram.errors.exceptions.bad_request_400.PhotoRemoteFileInvalid:
