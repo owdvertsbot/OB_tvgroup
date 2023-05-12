@@ -107,6 +107,8 @@ async def start(client, message):
         except:
             pass
         
+t = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192") # doctest:+SKIP   
+        
         
 # Function to retrieve TV show information and landscape poster
 def get_tvshow_info(name):
