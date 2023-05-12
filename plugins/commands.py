@@ -144,7 +144,7 @@ async def on_message(client, message):
     if is_tvshow(message.text):
         # Get TV show information and landscape poster
         tvshow_info = get_tvshow_info(message.text)
-        print(tvshow_info)
+        print(f"tvshow_info: {tvshow_info}")  # Print the output of get_tvshow_info
         if tvshow_info:
             title, overview, poster_url = tvshow_info
             # Send TV show information and landscape poster
