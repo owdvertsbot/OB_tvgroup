@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from info import BOT_TOKEN, API_ID, API_HASH
+from info import BOT_TOKEN, API_ID, API_HASH, THETVDB_API_KEY
 
 load_dotenv()
 
