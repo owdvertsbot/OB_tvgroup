@@ -134,7 +134,7 @@ def get_tvshow_info(name):
 def is_tvshow(message_text):
     print(f"Checking if '{message_text}' is a TV show name")
     # Use regular expression to match TV show names
-    regex = r'(?<!/connect)\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
+    regex = r'\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
     return re.search(regex, message_text)
 
 # on_message function to handle incoming messages
