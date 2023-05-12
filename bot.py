@@ -4,6 +4,10 @@ from dotenv import load_dotenv
 import requests
 import re
 
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
