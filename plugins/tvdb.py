@@ -6,7 +6,7 @@ import pyrogram
 import tvdb_api
 
 from pyrogram import Client, filters, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButon
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import BadRequest
 from dotenv import load_dotenv
 from tvdb_api import tvdb_error, tvdb_shownotfound, tvdv_seasonnotfound, tvdb_episodenotfound, tvdb_attributenotfound
