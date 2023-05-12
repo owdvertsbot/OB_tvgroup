@@ -8,6 +8,7 @@ import requests
 import pyrogram
 import urllib.request
 import urllib.parse
+import tvdb_api
 
 from datetime import datetime
 from pyrogram import filters
