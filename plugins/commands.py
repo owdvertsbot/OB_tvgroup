@@ -1,17 +1,15 @@
 import os
-import re
 import math
 import json
 import time
 import shutil
-import requests
-import pyrogram
 import urllib.request
 import urllib.parse
 
 from datetime import datetime
+from pyrogram import filters
 from pyrogram import Client, filters, enums
-from pyrogram.errors import ChatAdminRequired, FloodWait, BadRequest
+from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
@@ -103,7 +101,3 @@ async def start(client, message):
             )
         except:
             pass
-        
-        
-        
-
