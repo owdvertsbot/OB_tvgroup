@@ -9,4 +9,3 @@ python-dotenv
 bs4
 dnspython
 tvdb_api
-https://github.com/dbr/tvdb_api
