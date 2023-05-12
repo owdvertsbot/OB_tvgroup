@@ -1,8 +1,6 @@
 import os
 import pyrogram
-
 from info import BOT_TOKEN, API_ID, API_HASH
-
 
 if __name__ == "__main__" :
     plugins = dict(
