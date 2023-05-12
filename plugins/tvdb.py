@@ -15,23 +15,24 @@ t = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192")
 
 
 # Function to retrieve TV show information and landscape poster
-def get_tvshow_info(name):
+def get_tvshow_info(message_text):
     try:
-        url = f'https://api.thetvdb.com/search/series?name={name}'
-        headers = {'Content-Type': 'application/json'}
-        data = {'apikey': 'fe9c05b0-2099-4c03-b0dd-91ee77dfa192'}
-        response = requests.post(url, headers=headers, data=json.dumps(data)).json()
-        if response['data']:
-            tv_show = response['data'][0]
-            title = tv_show['seriesName']
-            overview = tv_show['overview']
-            poster_path = tv_show['banner']
-            if poster_path:
-                poster_url = f'https://www.thetvdb.com/banners/{poster_path}'
-                return title, overview, poster_url
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-    except KeyError as e:
+        tvdb = tvdb_api.Tvdb('fe9c05b0-2099-4c03-b0dd-91ee77dfa192')
+        tv_show = tvdb[message_text]
+        title = tv_show['seriesname']
+        overview = tv_show['overview']
+        poster_url = tvdb[title]['banner']
+        if poster_url:
+            return title, overview, poster_url
+    except tvdb_shownotfound:
+        print(f"Error: TV Show '{message_text}' not found.")
+    except tvdb_seasonnotfound:
+        print(f"Error: Season not found for TV Show '{message_text}'.")
+    except tvdb_episodenotfound:
+        print(f"Error: Episode not found for TV Show '{message_text}'.")
+    except tvdb_attributenotfound:
+        print(f"Error: Attribute not found for TV Show '{message_text}'.")
+    except tvdb_error as e:
         print(f"Error: {e}")
     except Exception as e:
         print(f"Error: {e}")
