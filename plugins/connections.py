@@ -38,7 +38,7 @@ async def addconnection(client, message):
             await message.reply_text("You should be an admin in Given group!", quote=True)
             return
     except Exception as e:
-        logger.exception(e)
+        print(e)
         await message.reply_text(
             "Invalid Group ID!\n\nIf correct, Make sure I'm present in your group!!",
             quote=True,
@@ -72,7 +72,7 @@ async def addconnection(client, message):
         else:
             await message.reply_text("Add me as an admin in group", quote=True)
     except Exception as e:
-        logger.exception(e)
+        print(e)
         await message.reply_text('Some error occurred! Try again later.', quote=True)
         return
 
