@@ -160,5 +160,5 @@ async def on_message(client, message):
             except pyrogram.errors.exceptions.bad_request_400.PhotoContentUrlInvalid:
                 await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is invalid.")
             except pyrogram.errors.exceptions.bad_request_400.PhotoRemoteFileInvalid:
-    await message.reply_text('Error: Invalid photo file')
+                await message.reply_text('Error: Invalid photo file')
 
