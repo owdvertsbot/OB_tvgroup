@@ -16,7 +16,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from script import Script
-from info import SAVE_USER, PICS
+from info import SAVE_USER, PICS, THETVDB_API_KEY
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
@@ -110,7 +110,7 @@ def get_tvshow_info(name):
     # Replace <API_KEY> with your TheTVDB.com API key
     url = f'https://api.thetvdb.com/search/series?name={name}'
     headers = {'Content-Type': 'application/json'}
-    data = {'apikey': '<API_KEY>'}
+    data = {'apikey': '<THETVDB_API_KEY>'}
     response = requests.post(url, headers=headers, data=json.dumps(data)).json()
     if response['data']:
         tv_show = response['data'][0]
