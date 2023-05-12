@@ -137,7 +137,7 @@ def is_tvshow(message_text):
     return re.search(regex, message_text)
 
 # on_message function to handle incoming messages
-@Client.on_message(filters.text & ~filters.edited)
+@Client.on_message(filters.text & filters.group & ~filters.bot)
 async def on_message(client, message):
     # Check if message is a TV show name
     if is_tvshow(message.text):
