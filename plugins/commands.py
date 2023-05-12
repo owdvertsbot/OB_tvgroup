@@ -1,8 +1,10 @@
 import os
+import re
 import math
 import json
 import time
 import shutil
+import requests
 import urllib.request
 import urllib.parse
 
@@ -101,3 +103,39 @@ async def start(client, message):
             )
         except:
             pass
+        
+        
+# Function to retrieve TV show information and landscape poster
+def get_tvshow_info(name):
+    # Replace <API_KEY> with your TheTVDB.com API key
+    url = f'https://api.thetvdb.com/search/series?name={name}'
+    headers = {'Content-Type': 'application/json'}
+    data = {'apikey': '<API_KEY>'}
+    response = requests.post(url, headers=headers, data=json.dumps(data)).json()
+    if response['data']:
+        tv_show = response['data'][0]
+        title = tv_show['seriesName']
+        overview = tv_show['overview']
+        poster_path = tv_show['banner']
+        if poster_path:
+            poster_url = f'https://www.thetvdb.com/banners/{poster_path}'
+            return title, overview, poster_url
+    return None
+
+# Function to check if message is a TV show name
+def is_tvshow(message_text):
+    # Use regular expression to match TV show names
+    regex = r'\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
+    return re.search(regex, message_text)
+
+# on_message function to handle incoming messages
+async def on_message(client, message):
+    # Check if message is a TV show name
+    if is_tvshow(message.text):
+        # Get TV show information and landscape poster
+        tvshow_info = get_tvshow_info(message.text)
+        if tvshow_info:
+            title, overview, poster_url = tvshow_info
+            # Send TV show information and landscape poster
+            await message.reply_text(f'{title}\n\n{overview}')
+            await message.reply_photo(photo=poster_url)
