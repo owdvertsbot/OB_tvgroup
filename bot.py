@@ -1,36 +1,29 @@
 import os
 import pyrogram
-from dotenv import load_dotenv
 import requests
-import re
-
+from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-
 load_dotenv()
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-API_ID = os.getenv("API_ID")
-API_HASH = os.getenv("API_HASH")
-THETVDB_API_KEY = os.getenv("THETVDB_API_KEY")
 
 if __name__ == "__main__":
     plugins = dict(
         root="plugins"
     )
-    app = pyrogram.Client(
+    app = Client(
         "filter bot",
-        bot_token=BOT_TOKEN,
-        api_id=API_ID,
-        api_hash=API_HASH,
+        bot_token=os.getenv("BOT_TOKEN"),
+        api_id=os.getenv("API_ID"),
+        api_hash=os.getenv("API_HASH"),
         plugins=plugins,
         workers=300
     )
 
+
 def get_tvshow_info(name):
     url = f'https://api.thetvdb.com/search/series?name={name}'
-    headers = {'Authorization': f'Bearer {THETVDB_API_KEY}'}
+    headers = {'Authorization': f'Bearer {os.getenv("THETVDB_API_KEY")}'}
     response = requests.get(url, headers=headers).json()
     if response.get("data"):
         tv_show = response['data'][0]
@@ -45,17 +38,18 @@ def get_tvshow_info(name):
 
 def is_tvshow(message_text):
     regex = r'\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
-    return re.search(regex, message_text)
+    return bool(re.search(regex, message_text))
 
 
-@Client.on_message(filters.text & ~filters.edited)
+@app.on_message(filters.text & ~filters.edited)
 async def on_message(client, message):
     if is_tvshow(message.text):
         tvshow_info = get_tvshow_info(message.text)
         if tvshow_info:
             title, overview, poster_url = tvshow_info
             await message.reply_text(f'{title}\n\n{overview}')
-            await message.reply_photo(photo=poster_url)
+            if poster_url:
+                await message.reply_photo(photo=poster_url)
 
 
 app.run()
