@@ -1,75 +1,105 @@
-import os
 import re
-import json
-import requests
-import pyrogram
-import tvdb_api
+from typing import Tuple, List
+from tvdb_api import Tvdb
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors.exceptions.bad_request_400 import BadRequest
 
-from pyrogram import Client, filters, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import BadRequest
-from dotenv import load_dotenv
-from tvdb_api import Tvdb, tvdb_error, tvdb_shownotfound, tvdb_seasonnotfound, tvdb_episodenotfound, tvdb_attributenotfound
-
-tvdb = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192")
+# Initialize TVDB API with your API key
+t = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192")
 
 
-# Function to retrieve TV show information and landscape poster
-@Client.on_message(filters.command("tv") & filters.private)
-async def tv(client, message):
+@Client.on_message(filters.command("tv"))
+def tv_info(client, message):
+    # Split the message to retrieve the TV show name
+    command, *show_name = message.text.split(" ")
+    show_name = " ".join(show_name)
+    
+    # Search TV show based on the provided name
     try:
-        show_name = message.text.split(" ", 1)[1]
-        show = tvdb[show_name]
-        msg = f"**{show['seriesname']}**\n\n"
-        for season in show:
-            msg += f"<b>Season {season}: </b>\n"
-            for episode in show[season]:
-                msg += f"<code>{episode}: </code>{show[season][episode]['episodename']}\n"
-            msg += "\n"
-        await message.reply_text(msg)
-    except tvdb_shownotfound:
-        await message.reply_text(f"TV Show not found!")
-    except tvdb_seasonnotfound:
-        await message.reply_text(f"Season not found!")
-    except tvdb_episodenotfound:
-        await message.reply_text(f"Episode not found!")
-    except tvdb_attributenotfound:
-        await message.reply_text(f"Attribute not found!")
-    except Exception as e:
-        await message.reply_text(f"An error occurred: {str(e)}")
+        results = t.search(show_name)
+    except:
+        message.reply("An error occurred while searching for the TV show.")
+        return
+    
+    # If there is no matching TV show, inform the user
+    if not results:
+        message.reply("No TV shows found with that name.")
+        return
+    
+    # Retrieve the first search result
+    result = results[0]
+    
+    # Retrieve the TV show ID and full series name
+    show_id = result["id"]
+    series_name = result["seriesName"]
+    
+    # Retrieve the TV show information based on the ID
+    try:
+        show_info = t[show_id]
+    except:
+        message.reply("An error occurred while retrieving TV show information.")
+        return
+    
+    # Retrieve the TV show overview
+    overview = show_info["overview"]
+    
+    # Retrieve the TV show banner image
+    banner_url = show_info["banner"]
+    
+    # Retrieve the TV show genres
+    genres = show_info["genre"]
+    
+    # Generate a list of clickable inline buttons for each season
+    buttons = []
+    for season_num in show_info:
+        # If it's not a season dictionary, skip it
+        if not isinstance(show_info[season_num], dict):
+            continue
+        
+        # Extract the season number from the dictionary
+        season = show_info[season_num]["seasonNumber"]
+        
+        # Append the season button to the list of buttons
+        button = InlineKeyboardButton(
+            text=f"Season {season}",
+            callback_data=f"tv|{show_id}|{season}"
+        )
+        buttons.append(button)
+    
+    # Create a markup object for the inline keyboard
+    markup = InlineKeyboardMarkup([buttons])
+    
+    # Construct the message to be sent
+    msg = f"<b>{series_name}</b>\n\n"
+    msg += f"<i>Genres:</i> {genres}\n\n"
+    msg += f"{overview}"
+    
+    # Send the message with the inline keyboard markup and the banner image
+    try:
+        message.reply_photo(
+            photo=banner_url,
+            caption=msg,
+            reply_markup=markup,
+            parse_mode="html"
+        )
+    except BadRequest:
+        # If the banner is not available, send the message without the image
+        message.reply_text(
+            text=msg,
+            reply_markup=markup,
+            parse_mode="html"
+        )
 
-# Function to check if message is a TV show name
-def is_tvshow(message_text):
-    print(f"Checking if '{message_text}' is a TV show name")
-    # Use regular expression to match TV show names
-    regex = r'\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
-    return re.search(regex, message_text)
 
-# on_message function to handle incoming messages
-@Client.on_message(filters.command('series'))
-async def showid(client, message):
-    # Check if message is a TV show name
-    if is_tvshow(message.text):
-        # Get TV show information and landscape poster
-        tvshow_info = get_tvshow_info(message.text)
-        print(f"TV Show Info: {tvshow_info}")
-        if tvshow_info:
-            title, overview, poster_url = tvshow_info
-            # Send TV show information and landscape poster
-            try:
-                await message.reply_text(f'{title}\n\n{overview}')
-                await message.reply_photo(photo=poster_url)
-            except pyrogram.errors.exceptions.bad_request_400.PhotoInvalidDimensions:
-                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because it's dimensions are invalid.")
-            except pyrogram.errors.exceptions.bad_request_400.PhotoContentUrlEmpty:
-                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is empty.")
-            except pyrogram.errors.exceptions.bad_request_400.PhotoIdInvalid:
-                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the photo ID is invalid.")
-            except pyrogram.errors.exceptions.bad_request_400.PhotoInvalid:
-                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the photo is invalid.")
-            except pyrogram.errors.exceptions.bad_request_400.PhotoContentUrlInvalid:
-                await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is invalid.")
-            except pyrogram.errors.exceptions.bad_request_400.PhotoRemoteFileInvalid:
-                await message.reply_text('Error: Invalid photo file')
-               
-
+@Client.on_callback_query(filters.regex("^tv\|\d+\|\d+$"))
+def tv_season_info(client, callback_query):
+    # Extract the TV show ID and season number from the callback data
+    _, show_id, season_num = callback_query.data.split("|")
+    
+    # Retrieve the season information based on the provided TV show ID and season number
+    try:
+        season_info = t[int(show_id)][int(season_num)]
+    except:
+        callback_query.answer("An error occurred while retrieving season information.")
+       
