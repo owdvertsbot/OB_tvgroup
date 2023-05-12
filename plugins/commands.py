@@ -111,7 +111,7 @@ def get_tvshow_info(name):
     # Replace <API_KEY> with your TheTVDB.com API key
     url = f'https://api.thetvdb.com/search/series?name={name}'
     headers = {'Content-Type': 'application/json'}
-    data = {'apikey': '<THETVDB_API_KEY>'}
+    data = {'apikey': 'fe9c05b0-2099-4c03-b0dd-91ee77dfa192'}
     response = requests.post(url, headers=headers, data=json.dumps(data)).json()
     if response['data']:
         tv_show = response['data'][0]
