@@ -8,7 +8,6 @@ import requests
 import pyrogram
 import urllib.request
 import urllib.parse
-import tvdb_api
 
 from datetime import datetime
 from pyrogram import Client, filters, enums
@@ -17,7 +16,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from script import Script
-from info import SAVE_USER, PICS, THETVDB_API_KEY
+from info import SAVE_USER, PICS
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
