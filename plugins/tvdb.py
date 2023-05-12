@@ -11,30 +11,32 @@ from pyrogram.errors import BadRequest
 from dotenv import load_dotenv
 from tvdb_api import Tvdb, tvdb_error, tvdb_shownotfound, tvdb_seasonnotfound, tvdb_episodenotfound, tvdb_attributenotfound
 
+tvdb = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192")
+
 
 # Function to retrieve TV show information and landscape poster
-def get_tvshow_info(message_text):
+@Client.on_message(filters.command("tv") & filters.private)
+async def tv(client, message):
     try:
-        tvdb = tvdb_api.Tvdb('fe9c05b0-2099-4c03-b0dd-91ee77dfa192')
-        tv_show = tvdb[message_text]
-        title = tv_show['seriesname']
-        overview = tv_show['overview']
-        poster_url = tvdb[title]['banner']
-        if poster_url:
-            return title, overview, poster_url
+        show_name = message.text.split(" ", 1)[1]
+        show = tvdb[show_name]
+        msg = f"**{show['seriesname']}**\n\n"
+        for season in show:
+            msg += f"<b>Season {season}: </b>\n"
+            for episode in show[season]:
+                msg += f"<code>{episode}: </code>{show[season][episode]['episodename']}\n"
+            msg += "\n"
+        await message.reply_text(msg)
     except tvdb_shownotfound:
-        print(f"Error: TV Show '{message_text}' not found.")
+        await message.reply_text(f"TV Show not found!")
     except tvdb_seasonnotfound:
-        print(f"Error: Season not found for TV Show '{message_text}'.")
+        await message.reply_text(f"Season not found!")
     except tvdb_episodenotfound:
-        print(f"Error: Episode not found for TV Show '{message_text}'.")
+        await message.reply_text(f"Episode not found!")
     except tvdb_attributenotfound:
-        print(f"Error: Attribute not found for TV Show '{message_text}'.")
-    except tvdb_error as e:
-        print(f"Error: {e}")
+        await message.reply_text(f"Attribute not found!")
     except Exception as e:
-        print(f"Error: {e}")
-    return None
+        await message.reply_text(f"An error occurred: {str(e)}")
 
 # Function to check if message is a TV show name
 def is_tvshow(message_text):
@@ -69,6 +71,5 @@ async def showid(client, message):
                 await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is invalid.")
             except pyrogram.errors.exceptions.bad_request_400.PhotoRemoteFileInvalid:
                 await message.reply_text('Error: Invalid photo file')
-                except:
-                    pass
+               
 
