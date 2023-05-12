@@ -20,6 +20,7 @@ from info import SAVE_USER, PICS, THETVDB_API_KEY
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
+from dotenv import load_dotenv
 
 
 @Client.on_message(filters.command('id'))
