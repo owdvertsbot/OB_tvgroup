@@ -3,8 +3,8 @@ import pymongo
 
 from info import DATABASE_URI, DATABASE_NAME
  
-myclient = pymongo.MongoClient(Config.DATABASE_URI)
-mydb = myclient[Config.DATABASE_NAME]
+myclient = pymongo.MongoClient(DATABASE_URI)
+mydb = myclient[DATABASE_NAME]
 mycol = mydb['CONNECTION']   
 
 
