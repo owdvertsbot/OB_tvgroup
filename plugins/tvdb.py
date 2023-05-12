@@ -9,7 +9,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import BadRequest
 from dotenv import load_dotenv
-from tvdb_api import Tvdb, TvdbBaseException
+from tvdb_api import Tvdb, tvdb_error, tvdb_shownotfound, tvdb_seasonnotfound, tvdb_episodenotfound, tvdb_attributenotfound
 
 
 # Function to retrieve TV show information and landscape poster
@@ -69,4 +69,6 @@ async def showid(client, message):
                 await message.reply_text(f"{title}\n\n{overview}\n\nSorry, I could not send the poster because the URL is invalid.")
             except pyrogram.errors.exceptions.bad_request_400.PhotoRemoteFileInvalid:
                 await message.reply_text('Error: Invalid photo file')
+                except:
+                    pass
 
