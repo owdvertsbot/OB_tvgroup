@@ -36,6 +36,5 @@ DATABASE_URI = environ.get('DATABASE_URI', "")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Rajappan")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
-# THETVDB_API_KEY
-
-THETVDB_API_KEY = int(environ['THETVDB_API_KEY'])
+# TheTVDB API key
+THETVDB_API_KEY = os.environ.get("THETVDB_API_KEY", "")
