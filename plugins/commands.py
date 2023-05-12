@@ -112,7 +112,7 @@ def get_tvshow_info(name):
     try:
         url = f'https://api.thetvdb.com/search/series?name={name}'
         headers = {'Content-Type': 'application/json'}
-        data = {'apikey': THETVDB_API_KEY}
+        data = {'apikey': 'fe9c05b0-2099-4c03-b0dd-91ee77dfa192'}
         response = requests.post(url, headers=headers, data=json.dumps(data)).json()
         if response['data']:
             tv_show = response['data'][0]
@@ -132,6 +132,7 @@ def get_tvshow_info(name):
 
 # Function to check if message is a TV show name
 def is_tvshow(message_text):
+    print(f"Checking if '{message_text}' is a TV show name")
     # Use regular expression to match TV show names
     regex = r'\b([Tt][Vv]\s*[Ss]\d{2}([Ee]?\d{2})*)|([Tt][Vv]\s*[Ss]\d{1,2}\s*[Ee]\d{1,2})|([Tt][Vv]\s*series)\b'
     return re.search(regex, message_text)
