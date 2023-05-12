@@ -1,14 +1,17 @@
+import os
+import pyrogram
+from dotenv import load_dotenv
 import requests
 import re
-import os
-from dotenv import load_dotenv
-import pyrogram
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from info import BOT_TOKEN, API_ID, API_HASH, THETVDB_API_KEY
 
 load_dotenv()
 
-if __name__ == "__main__" :
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_ID = os.getenv("API_ID")
+API_HASH = os.getenv("API_HASH")
+THETVDB_API_KEY = os.getenv("THETVDB_API_KEY")
+
+if __name__ == "__main__":
     plugins = dict(
         root="plugins"
     )
@@ -21,10 +24,9 @@ if __name__ == "__main__" :
         workers=300
     )
 
-
 def get_tvshow_info(name):
     url = f'https://api.thetvdb.com/search/series?name={name}'
-    headers = {'Authorization': f'Bearer {os.getenv("THETVDB_API_KEY")}'}
+    headers = {'Authorization': f'Bearer {THETVDB_API_KEY}'}
     response = requests.get(url, headers=headers).json()
     if response.get("data"):
         tv_show = response['data'][0]
@@ -42,7 +44,7 @@ def is_tvshow(message_text):
     return re.search(regex, message_text)
 
 
-@app.on_message(filters.text & ~filters.edited)
+@Client.on_message(filters.text & ~filters.edited)
 async def on_message(client, message):
     if is_tvshow(message.text):
         tvshow_info = get_tvshow_info(message.text)
