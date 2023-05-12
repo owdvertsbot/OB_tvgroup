@@ -9,7 +9,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import BadRequest
 from dotenv import load_dotenv
-from tvdb_api import tvdb_error, tvdb_shownotfound, tvdv_seasonnotfound, tvdb_episodenotfound, tvdb_attributenotfound
+from tvdb_api import TvdbBaseException
 
 t = Tvdb(apikey="fe9c05b0-2099-4c03-b0dd-91ee77dfa192")
 
