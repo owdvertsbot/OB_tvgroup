@@ -19,9 +19,7 @@ from info import ADMINS, SAVE_USER
 
 @Client.on_message(filters.command(['filter', 'add']) & filters.incoming)
 async def addfilter(client, message):
-    userid = message.from_user.id if message.from_user else None
-    if not userid:
-        return await message.reply(f"You are anonymous admin. Use /connect {message.chat.id} in PM")
+    userid = message.from_user.id
     chat_type = message.chat.type
     args = message.text.html.split(None, 1)
 
