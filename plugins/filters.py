@@ -22,6 +22,9 @@ from info import ADMINS, SAVE_USER
 async def addfilter(client, message):
     userid = message.from_user.id
     chat_type = message.chat.type
+    if not message.text:
+        await message.reply_text("Message text is missing!", quote=True)
+        return
     args = message.text.html.split(None, 1)
 
     if chat_type == enums.ChatType.PRIVATE:
