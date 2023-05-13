@@ -25,7 +25,7 @@ async def add_filter(grp_id, text, reply_text, btn, file, alert):
     try:
         mycol.update_one({'text': str(text)},  {"$set": data}, upsert=True)
     except:
-        logger.exception('Some error occured!', exc_info=True)
+        print('Couldnt save, check your db')
              
      
 async def find_filter(group_id, name):
@@ -71,7 +71,7 @@ async def delete_filter(message, text, group_id):
         await message.reply_text(
             f"'`{text}`'  deleted. I'll not respond to that filter anymore.",
             quote=True,
-            parse_mode=enums.ParseMode.MARKDOWN
+            parse_mode="md"
         )
     else:
         await message.reply_text("Couldn't find that filter!", quote=True)
@@ -81,13 +81,13 @@ async def del_all(message, group_id, title):
     if str(group_id) not in mydb.list_collection_names():
         await message.edit_text(f"Nothing to remove in {title}!")
         return
-
+        
     mycol = mydb[str(group_id)]
     try:
         mycol.drop()
         await message.edit_text(f"All filters from {title} has been removed")
     except:
-        await message.edit_text("Couldn't remove all filters from group!")
+        await message.edit_text(f"Couldn't remove all filters from group!")
         return
 
 
@@ -95,7 +95,10 @@ async def count_filters(group_id):
     mycol = mydb[str(group_id)]
 
     count = mycol.count()
-    return False if count == 0 else count
+    if count == 0:
+        return False
+    else:
+        return count
 
 
 async def filter_stats():
@@ -103,12 +106,14 @@ async def filter_stats():
 
     if "CONNECTION" in collections:
         collections.remove("CONNECTION")
+    if "USERS" in collections:
+        collections.remove("USERS")
 
     totalcount = 0
     for collection in collections:
         mycol = mydb[collection]
         count = mycol.count()
-        totalcount += count
+        totalcount = totalcount + count
 
     totalcollections = len(collections)
 
