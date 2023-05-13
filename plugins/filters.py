@@ -4,6 +4,7 @@ from pyrogram import filters, Client, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.filters_mdb import(
    add_filter,
+   find_filter,
    get_filters,
    delete_filter,
    count_filters
