@@ -9,15 +9,21 @@ from database.filters_mdb import(
 )
 
 from database.connections_mdb import active_connection
+from database.users_mdb import add_user, all_users
 from plugins.helpers import get_file_id, parser, split_quotes
 from info import ADMINS
 
 
 
 
-@Client.on_message(filters.command(['filter', 'add']) & filters.incoming)
+@Client.on_message(filters.command(Config.ADD_FILTER_CMD))
 async def addfilter(client, message):
-    if chat_type == enums.ChatType.PRIVATE:
+      
+    userid = message.from_user.id
+    chat_type = message.chat.type
+    args = message.text.html.split(None, 1)
+
+    if chat_type == "private":
         grpid = await active_connection(str(userid))
         if grpid is not None:
             grp_id = grpid
@@ -31,7 +37,7 @@ async def addfilter(client, message):
             await message.reply_text("I'm not connected to any groups!", quote=True)
             return
 
-    elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
+    elif (chat_type == "group") or (chat_type == "supergroup"):
         grp_id = message.chat.id
         title = message.chat.title
 
@@ -39,21 +45,17 @@ async def addfilter(client, message):
         return
 
     st = await client.get_chat_member(grp_id, userid)
-    if (
-        st.status != enums.ChatMemberStatus.ADMINISTRATOR
-        and st.status != enums.ChatMemberStatus.OWNER
-        and str(userid) not in Config.AUTH_USERS
-    ):
+    if not ((st.status == "administrator") or (st.status == "creator") or (str(userid) in Config.AUTH_USERS)):
         return
-
+        
 
     if len(args) < 2:
         await message.reply_text("Command Incomplete :(", quote=True)
         return
-
+    
     extracted = split_quotes(args[1])
     text = extracted[0].lower()
-
+   
     if not message.reply_to_message and len(extracted) < 2:
         await message.reply_text("Add some content to save your filter!", quote=True)
         return
@@ -69,7 +71,12 @@ async def addfilter(client, message):
         try:
             rm = message.reply_to_message.reply_markup
             btn = rm.inline_keyboard
-            msg = get_file_id(message.reply_to_message)
+            msg = message.reply_to_message.document or\
+                  message.reply_to_message.video or\
+                  message.reply_to_message.photo or\
+                  message.reply_to_message.audio or\
+                  message.reply_to_message.animation or\
+                  message.reply_to_message.sticker
             if msg:
                 fileid = msg.file_id
                 reply_text = message.reply_to_message.caption.html
@@ -83,15 +90,60 @@ async def addfilter(client, message):
             fileid = None
             alert = None
 
-    elif message.reply_to_message and message.reply_to_message.media:
+    elif message.reply_to_message and message.reply_to_message.photo:
         try:
-            msg = get_file_id(message.reply_to_message)
-            fileid = msg.file_id if msg else None
-            reply_text, btn, alert = parser(extracted[1], text) if message.reply_to_message.sticker else parser(message.reply_to_message.caption.html, text)
+            fileid = message.reply_to_message.photo.file_id
+            reply_text, btn, alert = parser(message.reply_to_message.caption.html, text)
         except:
             reply_text = ""
             btn = "[]"
             alert = None
+
+    elif message.reply_to_message and message.reply_to_message.video:
+        try:
+            fileid = message.reply_to_message.video.file_id
+            reply_text, btn, alert = parser(message.reply_to_message.caption.html, text)
+        except:
+            reply_text = ""
+            btn = "[]"
+            alert = None
+
+    elif message.reply_to_message and message.reply_to_message.audio:
+        try:
+            fileid = message.reply_to_message.audio.file_id
+            reply_text, btn, alert = parser(message.reply_to_message.caption.html, text)
+        except:
+            reply_text = ""
+            btn = "[]"
+            alert = None
+   
+    elif message.reply_to_message and message.reply_to_message.document:
+        try:
+            fileid = message.reply_to_message.document.file_id
+            reply_text, btn, alert = parser(message.reply_to_message.caption.html, text)
+        except:
+            reply_text = ""
+            btn = "[]"
+            alert = None
+
+    elif message.reply_to_message and message.reply_to_message.animation:
+        try:
+            fileid = message.reply_to_message.animation.file_id
+            reply_text, btn, alert = parser(message.reply_to_message.caption.html, text)
+        except:
+            reply_text = ""
+            btn = "[]"
+            alert = None
+
+    elif message.reply_to_message and message.reply_to_message.sticker:
+        try:
+            fileid = message.reply_to_message.sticker.file_id
+            reply_text, btn, alert =  parser(extracted[1], text)
+        except:
+            reply_text = ""
+            btn = "[]"
+            alert = None
+
     elif message.reply_to_message and message.reply_to_message.text:
         try:
             fileid = None
@@ -100,15 +152,16 @@ async def addfilter(client, message):
             reply_text = ""
             btn = "[]"
             alert = None
+
     else:
         return
-
+    
     await add_filter(grp_id, text, reply_text, btn, fileid, alert)
 
     await message.reply_text(
         f"Filter for  `{text}`  added in  **{title}**",
         quote=True,
-        parse_mode=enums.ParseMode.MARKDOWN
+        parse_mode="md"
     )
 
 
