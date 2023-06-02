@@ -103,9 +103,9 @@ async def start(client, message):
         except:
             pass
         
-tmdb = TMDb('9555335f868ed5bce03a57c35fa9da19')
+tmdb = TMDb(api_key='9555335f868ed5bce03a57c35fa9da19')
 
-tv = TV()
+TV(api_key='9555335f868ed5bce03a57c35fa9da19')
 
 
 
@@ -161,6 +161,7 @@ def tv_show_info(client, message):
             reply_markup=show_overview_inline_keyboard(tv_show.id)
 
         )
+
 
 # Handler for 'overview' command
 
