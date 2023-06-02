@@ -18,7 +18,8 @@ from info import SAVE_USER, PICS
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
-
+from tmdbv3api import TMDb
+from tmdbv3api import TV
 
 @Client.on_message(filters.command('id'))
 async def showid(client, message):
@@ -102,7 +103,6 @@ async def start(client, message):
         except:
             pass
         
-# Set up the TMDB API client
 tmdb = TMDb()
 tmdb.api_key = os.environ.get("9555335f868ed5bce03a57c35fa9da19")
 tv = TV()
