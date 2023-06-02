@@ -18,6 +18,7 @@ from info import SAVE_USER, PICS
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
+from tmdb import TMDB
 from tmdbv3api import TMDb
 from tmdbv3api import TV
 
