@@ -127,7 +127,7 @@ def tv_show_info(client, message):
         caption += f"Runtime: {tv_show_details.episode_run_time[0]} minutes"
 
         # Get the TV show poster
-        poster_url = tmdb.base_url + f"w342{tv_show_details.poster_path}"
+        poster_url = "https://image.tmdb.org/t/p/w342" + tv_show_details.poster_path
 
         # Send the photo with caption
         client.send_photo(
