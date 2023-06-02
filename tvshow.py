@@ -1,52 +1,34 @@
 import os
-import urllib
-from pyrogram import Client
-from tmdbv3api import TMDb, TV
+from pyrogram import Client, filters
+from tmdbv3api import TMDb
+from tmdbv3api import TV
 
-
+# Set up the TMDB API client
 tmdb = TMDb()
-tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
-
+tmdb.api_key = os.environ.get("9555335f868ed5bce03a57c35fa9da19")
 tv = TV()
 
+# Handler for the '/start' command
+@Client.on_message(filters.command("start"))
+def start_command(client, message):
+    response = "Welcome to the TV Show Bot! Please enter the name of a TV show to get information about it."
+    client.send_message(chat_id=message.chat.id, text=response)
 
-def send_tv_show_details(bot, chat_id, tv_show_name):
-    # Search for the TV show
-    results = tv.search(tv_show_name)
-    if not results:
-        bot.send_message(chat_id, "TV show not found.")
-        return
+# Handler for text messages
+@Client.on_message(filters.text)
+def tv_show_info(client, message):
+    show_name = message.text
 
-    tv_show = results[0]
-    tv_show_id = tv_show.id
-
-    # Get the details of the TV show
-    tv_show_details = tv.get_tv_show_details(tv_show_id)
-
-    # Download the poster image
-    poster_path = tv_show_details.poster_path
-    if poster_path:
-        poster_url = tmdb.image_url + "w500" + poster_path
-        poster_file_name = f"{tv_show_id}_poster.jpg"
-        urllib.request.urlretrieve(poster_url, poster_file_name)
-
-        # Send the TV show details and poster
-        bot.send_photo(chat_id, photo=poster_file_name, caption=tv_show_details.overview)
+    # Search for the TV show using the TMDB API
+    search_results = tv.search(show_name)
+    if len(search_results) == 0:
+        response = "Sorry, I couldn't find any information about that TV show."
     else:
-        bot.send_message(chat_id, "Poster not available for this TV show.")
-    
-    # Clean up the downloaded poster file
-    os.remove(poster_file_name)
+        tv_show = search_results[0]
+        response = f"Title: {tv_show.name}\n"
+        response += f"Overview: {tv_show.overview}\n"
+        response += f"First Air Date: {tv_show.first_air_date}\n"
+        response += f"Vote Average: {tv_show.vote_average}\n"
 
-    
-def main():
-    with app:
-        @app.on_message()
-        def handle_message(client, message):
-            if message.text:
-                # Extract the TV show name from the user's query
-                tv_show_name = message.text
+    client.send_message(chat_id=message.chat.id, text=response)
 
-                # Send the TV show details to the user
-                send_tv_show_details(client, message.chat.id, tv_show_name)
-    
