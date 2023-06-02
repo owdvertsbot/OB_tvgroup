@@ -108,7 +108,7 @@ tmdb.api_key = os.environ.get("9555335f868ed5bce03a57c35fa9da19")
 tv = TV()
 
 @Client.on_message(filters.command('tvshow')
-def tv_show_info(client, message):
+async def tv_show_info(client, message):
     show_name = message.text
     search_results = tv.search(show_name)
     if len(search_results) == 0:
