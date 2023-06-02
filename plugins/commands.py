@@ -111,53 +111,88 @@ tv = TV()
 # Handler for text messages
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
+
     show_name = message.text
 
-
     # Search for the TV show using the TMDB API
+
     search_results = tv.search(show_name)
+
     if len(search_results) == 0:
+
         response = "Sorry, I couldn't find any information about that TV show."
+
         client.send_message(chat_id=message.chat.id, text=response)
+
     else:
+
         tv_show = search_results[0]
+
         tv_show_details = tv.details(tv_show.id)
+
         caption = f"Title: {tv_show_details.name}\n"
+
         caption += f"First Air Date: {tv_show_details.first_air_date}\n"
+
         caption += f"Vote Average: {tv_show_details.vote_average}\n"
+
         caption += f"Seasons: {tv_show_details.number_of_seasons}\n"
+
         caption += f"Total Episodes: {tv_show_details.number_of_episodes}\n"
+
         caption += f"Runtime: {tv_show_details.episode_run_time[0]} minutes"
 
         # Get the TV show poster
+
         poster_url = tmdb.base_url + f"w342{tv_show_details.poster_path}"
 
         # Send the photo with caption
+
         client.send_photo(
+
             chat_id=message.chat.id,
+
             photo=poster_url,
+
             caption=caption,
+
             reply_markup=show_overview_inline_keyboard(tv_show.id)
+
         )
 
 # Handler for 'overview' command
+
 @Client.on_callback_query(filters.regex('^overview_'))
+
 def show_overview(client, callback_query):
+
     # Extract the TV show ID from the callback data
+
     tv_show_id = int(callback_query.data.split('_')[1])
 
     # Retrieve the TV show using the TMDB API
+
     tv_show = tv.details(tv_show_id)
 
     # Send the overview as a private message to the user
+
     client.send_message(chat_id=callback_query.from_user.id, text=tv_show.overview)
 
 def show_overview_inline_keyboard(tv_show_id):
+
     return InlineKeyboardMarkup(
+
         [[
+
             InlineKeyboardButton(
+
                 text="Show Overview",
+
                 callback_data=f"overview_{tv_show_id}"
+
             )
+
         ]]
+
     )
+
