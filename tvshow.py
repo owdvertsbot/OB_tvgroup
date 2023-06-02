@@ -9,7 +9,7 @@ tmdb.api_key = os.environ.get("9555335f868ed5bce03a57c35fa9da19")
 tv = TV()
 
 # Handler for the '/start' command
-@Client.on_message(filters.command("start"))
+@Client.on_message(filters.command("start1"))
 def start_command(client, message):
     response = "Welcome to the TV Show Bot! Please enter the name of a TV show to get information about it."
     client.send_message(chat_id=message.chat.id, text=response)
