@@ -107,7 +107,7 @@ tmdb = TMDb()
 tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
 tv = TV()
 
-@app.on_message(filters.text)
+@Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
 
@@ -138,7 +138,7 @@ def tv_show_info(client, message):
         )
 
 # Handler for 'overview' command
-@app.on_callback_query(filters.regex('^overview_'))
+@Client.on_callback_query(filters.regex('^overview_'))
 def show_overview(client, callback_query):
     # Extract the TV show ID from the callback data
     tv_show_id = int(callback_query.data.split('_')[1])
