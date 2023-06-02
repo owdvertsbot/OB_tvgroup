@@ -118,15 +118,16 @@ def tv_show_info(client, message):
         client.send_message(chat_id=message.chat.id, text=response)
     else:
         tv_show = search_results[0]
-        caption = f"<b>Title: {tv_show.name}</b>\n"
-        caption += f"<b>First Air Date:</b> {tv_show.first_air_date}\n"
-        caption += f"<b>Vote Average:</b> {tv_show.vote_average}\n"
-        caption += f"<b>Seasons:</b> {tv_show.number_of_seasons}\n"
-        caption += f"<b>Total Episodes:</b> {tv_show.number_of_episodes}\n"
-        caption += f"<b>Runtime:</b> {tv_show.episode_run_time[0]} minutes"
+        tv_show_details = tv.details(tv_show.id)
+        caption = f"Title: {tv_show_details.name}\n"
+        caption += f"First Air Date: {tv_show_details.first_air_date}\n"
+        caption += f"Vote Average: {tv_show_details.vote_average}\n"
+        caption += f"Seasons: {tv_show_details.number_of_seasons}\n"
+        caption += f"Total Episodes: {tv_show_details.number_of_episodes}\n"
+        caption += f"Runtime: {tv_show_details.episode_run_time[0]} minutes"
 
         # Get the TV show poster
-        poster_url = tmdb.base_url + f"w342{tv_show.poster_path}"
+        poster_url = tmdb.base_url + f"w342{tv_show_details.poster_path}"
 
         # Send the photo with caption
         client.send_photo(
