@@ -106,7 +106,7 @@ async def start(client, message):
 tmdb = TMDb()
 tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
 tv = TV()
-
+tmdb = TMDb(api_key="9555335f868ed5bce03a57c35fa9da19")
 
 # Handler for text messages
 @Client.on_message(filters.text)
