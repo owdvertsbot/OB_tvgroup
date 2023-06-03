@@ -107,6 +107,7 @@ tmdb = TMDb()
 tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
 tv = TV()
 
+# Handler for text messages
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
@@ -118,31 +119,47 @@ def tv_show_info(client, message):
     else:
         tv_show = search_results[0]
         poster_url = f"https://image.tmdb.org/t/p/w1280{tv_show.backdrop_path}"
-        
-        # Get additional information about the TV show
-        season_number = 1  # Replace with the actual season number
-        episode_number = 1  # Replace with the actual episode number
-        network_or_service = "Netflix"  # Replace with the actual network or streaming service
-        air_date_and_time = "Friday, 9:00 PM"  # Replace with the actual air date and time
-        website_url = "https://www.example.com"  # Replace with the actual URL of the TV show's website or social media page
-        quotes = "This is a memorable quote from the TV show."  # Replace with actual quotes from the TV show
-        trivia = "Interesting trivia about the TV show."  # Replace with interesting trivia about the TV show
-        opinions = "This is my opinion about the TV show."  # Replace with your opinions or user opinions about the TV show
-        
-        caption = f"**Title:** {tv_show.name}\n"
-        caption += f"**Overview:** {tv_show.overview}\n"
-        caption += f"**Season:** {season_number}\n"
-        caption += f"**Episode:** {episode_number}\n"
-        caption += f"**Network/Streaming Service:** {network_or_service}\n"
-        caption += f"**Air Date and Time:** {air_date_and_time}\n"
-        caption += f"**Website/Social Media:** [TV Show Page]({website_url})\n"
-        caption += f"**Quotes:** {quotes}\n"
-        caption += f"**Trivia:** {trivia}\n"
-        caption += f"**Opinions:** {opinions}\n"
+        response = f"Title: {tv_show.name}\n"
+        response += f"Overview: {tv_show.overview}\n"
+        response += f"First Air Date: {tv_show.first_air_date}\n"
+        response += f"Vote Average: {tv_show.vote_average}\n"
+        response += f"Poster: [Poster]({poster_url})\n"
 
-    client.send_photo(
-        chat_id=message.chat.id,
-        photo=poster_url,
-        caption=caption,
-        reply_markup=show_overview_inline_keyboard(tv_show.id)
-    )
+        # Generate inline keyboard
+        inline_keyboard = show_overview_inline_keyboard(tv_show.id)
+        client.send_photo(
+            chat_id=message.chat.id,
+            photo=poster_url,
+            caption=response,
+            reply_markup=inline_keyboard
+        )
+
+# Handler for callback queries
+@Client.on_callback_query()
+def callback_handler(client, callback_query):
+    callback_data = callback_query.data
+    # Handle the callback data based on the button pressed
+    if callback_data.startswith("overview_"):
+        tv_show_id = callback_data.split("_")[1]
+        # Retrieve the TV show details from the TMDB API
+        tv_show = tv.details(tv_show_id)
+        # Send the TV show overview as a message
+        client.send_message(
+            chat_id=callback_query.message.chat.id,
+            text=tv_show.overview
+        )
+
+def show_overview_inline_keyboard(tv_show_id):
+    # Create inline keyboard with options
+    keyboard = [
+        [
+            InlineKeyboardButton("Cast", callback_data=f"cast:{tv_show_id}"),
+            InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id}")
+        ],
+        [
+            InlineKeyboardButton("Similar Shows", callback_data=f"similar:{tv_show_id}"),
+            InlineKeyboardButton("More Info", callback_data=f"info:{tv_show_id}")
+        ]
+    ]
+    
+    return InlineKeyboardMarkup(keyboard)
