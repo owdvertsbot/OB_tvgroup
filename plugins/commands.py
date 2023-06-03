@@ -138,48 +138,94 @@ def tv_show_info(client, message):
             reply_markup=inline_keyboard
         )
 
-@Client.on_callback_query()
-def callback_handler(client, callback_query):
+@client.on_callback_query()
+
+def callback_handler(client: Client, callback_query: CallbackQuery):
+
     callback_data = callback_query.data
+
     if callback_data.startswith("cast:"):
+
         tv_show_id = callback_data.split(":")[1]
-        cast = tv.credits(tv_show_id).cast
-        cast_info = "\n".join([f"{actor.name} as {actor.character}" for actor in cast])
+
+        # Retrieve the TV show cast using the TMDB API
+
+        cast = tmdb.get_tv_show_cast(tv_show_id)
+
+        cast_info = "\n".join([f"{actor['name']} as {actor['character']}" for actor in cast])
+
+        # Send the cast information as a message
+
         client.send_message(
+
             chat_id=callback_query.message.chat.id,
+
             text=f"Cast:\n{cast_info}"
+
         )
-        pass
+
     elif callback_data.startswith("episodes:"):
+
         tv_show_id = callback_data.split(":")[1]
-        episodes = tv.seasons(tv_show_id)
-        episode_info = "\n".join([f"Season {episode.season_number}, Episode {episode.episode_number}: {episode.name}" for episode in episodes])
+
+        # Retrieve the TV show episodes using the TMDB API
+
+        episodes = tmdb.get_tv_show_episodes(tv_show_id)
+
+        episode_info = "\n".join([f"Season {episode['season_number']}, Episode {episode['episode_number']}: {episode['name']}" for episode in episodes])
+
+        # Send the episode information as a message
+
         client.send_message(
+
             chat_id=callback_query.message.chat.id,
+
             text=f"Episodes:\n{episode_info}"
+
         )
-        pass
+
     elif callback_data.startswith("similar:"):
+
         tv_show_id = callback_data.split(":")[1]
-        similar_shows = tv.similar(tv_show_id)
-        similar_info = "\n".join([show.name for show in similar_shows])
+
+        # Retrieve similar TV shows using the TMDB API
+
+        similar_shows = tmdb.get_similar_tv_shows(tv_show_id)
+
+        similar_info = "\n".join([show['name'] for show in similar_shows])
+
+        # Send the similar shows information as a message
+
         client.send_message(
+
             chat_id=callback_query.message.chat.id,
+
             text=f"Similar Shows:\n{similar_info}"
+
         )
-        pass
+
     elif callback_data.startswith("info:"):
+
         tv_show_id = callback_data.split(":")[1]
-        tv_show = tv.details(tv_show_id)
-        info = f"Network: {tv_show.networks[0].name}\n" if tv_show.networks else ""
-        info += f"Streaming Service: {tv_show.streaming_info.get('name', '')}\n" if tv_show.streaming_info else ""
-        info += f"Website: {tv_show.homepage}\n" if tv_show.homepage else ""
-        info += f"Quotes: {tv_show.quotes[0].quote}\n" if tv_show.quotes else ""
-        info += f"Trivia: {tv_show.trivia[0].text}\n" if tv_show.trivia else ""
-        info += f"Opinions: {tv_show.opinions[0].opinion}\n" if tv_show.opinions else ""
+
+        # Retrieve additional information about the TV show using the TMDB API
+
+        tv_show = tmdb.get_tv_show_details(tv_show_id)
+
+        info = f"Network: {tv_show['networks'][0]['name']}\n" if tv_show['networks'] else ""
+
+        info += f"Streaming Service: {tv_show['streaming_info']['name']}\n" if tv_show['streaming_info'] else ""
+
+        info += f"Website: {tv_show['homepage']}\n" if tv_show['homepage'] else ""
+
+        # Send the additional information as a message
+
         client.send_message(
+
             chat_id=callback_query.message.chat.id,
+
             text=f"Additional Information:\n{info}"
+
         )
 
 def show_overview_inline_keyboard(tv_show_id):
