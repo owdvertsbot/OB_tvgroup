@@ -18,7 +18,6 @@ from info import SAVE_USER, PICS
 from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
-from tmdb import TMDB
 from tmdbv3api import TMDb
 from tmdbv3api import TV
 
@@ -104,47 +103,23 @@ async def start(client, message):
         except:
             pass
         
-tmdb = TMDB()
-tmdb.api_key = '9555335f868ed5bce03a57c35fa9da19'
+tmdb = TMDb()
+tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
+tv = TV()
 
-# Handler for text messages
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
-    search_results = tmdb.search(show_name)
+
+    # Search for the TV show using the TMDB API
+    search_results = tv.search(show_name)
     if len(search_results) == 0:
         response = "Sorry, I couldn't find any information about that TV show."
-        client.send_message(chat_id=message.chat.id, text=response)
     else:
         tv_show = search_results[0]
-        tv_show_details = tmdb.details(tv_show.id)
-        caption = f"Title: {tv_show_details.name}\n"
-        caption += f"First Air Date: {tv_show_details.first_air_date}\n"
-        caption += f"Vote Average: {tv_show_details.vote_average}\n"
-        caption += f"Seasons: {tv_show_details.number_of_seasons}\n"
-        caption += f"Total Episodes: {tv_show_details.number_of_episodes}\n"
-        caption += f"Runtime: {tv_show_details.episode_run_time[0]} minutes"
-        poster_url = tmdb.base_url + f"w342{tv_show_details.poster_path}"
-        client.send_photo(
-            chat_id=message.chat.id,
-            photo=poster_url,
-            caption=caption,
-            reply_markup=show_overview_inline_keyboard(tv_show.id)
-        )
+        response = f"Title: {tv_show.name}\n"
+        response += f"Overview: {tv_show.overview}\n"
+        response += f"First Air Date: {tv_show.first_air_date}\n"
+        response += f"Vote Average: {tv_show.vote_average}\n"
 
-# Handler for 'overview' command
-@Client.on_callback_query(filters.regex('^overview_'))
-def show_overview(client, callback_query):
-    tv_show_id = int(callback_query.data.split('_')[1])
-    tv_show = tmdb.details(tv_show_id)
-    client.send_message(chat_id=callback_query.from_user.id, text=tv_show.overview)
-
-def show_overview_inline_keyboard(tv_show_id):
-    return InlineKeyboardMarkup(
-        [[
-            InlineKeyboardButton(
-                text="Show Overview",
-                callback_data=f"overview_{tv_show_id}"
-            )
-        ]]
-    )
+    client.send_message(chat_id=message.chat.id, text=response)
