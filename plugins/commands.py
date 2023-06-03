@@ -105,7 +105,7 @@ async def start(client, message):
 
 
 tmdb = TMDb()
-tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
+tmdb.api_key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NTU1MzM1Zjg2OGVkNWJjZTAzYTU3YzM1ZmE5ZGExOSIsInN1YiI6IjYxNzkwYWM2NzBiNDQ0MDAyYmFiZmMxNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.R4Pa-9YfC1sGlc2FEy1J2AvAgiCDJ3YBmxADCp-LjF8"
 tv = TV()
 
 from pyrogram.types import InputMediaPhoto
