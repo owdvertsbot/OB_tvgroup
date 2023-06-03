@@ -232,7 +232,7 @@ def show_overview_inline_keyboard(tv_show_id):
     keyboard = [
         [
             InlineKeyboardButton("Cast", callback_data="help_data"),
-            InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id})
+            InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id}")
         ],
         [
             InlineKeyboardButton("Similar Shows", callback_data=f"similar:{tv_show_id}"),
