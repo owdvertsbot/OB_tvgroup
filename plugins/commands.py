@@ -141,13 +141,18 @@ def tv_show_info(client, message):
 @Client.on_callback_query()
 def callback_handler(client, callback_query):
     callback_data = callback_query.data
+    print("Callback data:", callback_data)  # Add this line to check the callback data
+
     if callback_data.startswith("cast:"):
         tv_show_id = callback_data.split(":")[1]
+        print("TV show ID:", tv_show_id)  # Add this line to check the TV show ID
+
         # Retrieve the cast of the TV show from the TMDB API
         cast = tv.credits(tv_show_id).cast
-        # Format the cast information
+        print("Cast:", cast)  # Add this line to check the retrieved cast data
+
+        # Format and send the cast information as a message
         cast_info = "\n".join([f"{actor.name} as {actor.character}" for actor in cast])
-        # Send the cast information as a message
         client.send_message(
             chat_id=callback_query.message.chat.id,
             text=f"Cast:\n{cast_info}"
