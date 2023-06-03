@@ -103,4 +103,27 @@ async def start(client, message):
         except:
             pass
         
+tmdb = TMDb()
+tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
+tv = TV()
+
+@Client.on_message(filters.text)
+def tv_show_info(client, message):
+    show_name = message.text
+
+    # Search for the TV show using the TMDB API
+    search_results = tv.search(show_name)
+    if len(search_results) == 0:
+        response = "Sorry, I couldn't find any information about that TV show."
+    else:
+        tv_show = search_results[0]
+        poster_url = f"https://image.tmdb.org/t/p/w500{tv_show.poster_path}"
+        response = f"Title: {tv_show.name}\n"
+        response += f"Overview: {tv_show.overview}\n"
+        response += f"First Air Date: {tv_show.first_air_date}\n"
+        response += f"Vote Average: {tv_show.vote_average}\n"
+        response += f"Poster: [Poster]({poster_url})\n"
+
+    client.send_message(chat_id=message.chat.id, text=response)
+
         
