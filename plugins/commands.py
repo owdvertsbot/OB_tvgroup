@@ -138,7 +138,7 @@ def tv_show_info(client, message):
             reply_markup=inline_keyboard
         )
 
-@client.on_callback_query()
+@Client.on_callback_query()
 
 def callback_handler(client: Client, callback_query: CallbackQuery):
 
