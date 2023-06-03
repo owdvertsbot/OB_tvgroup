@@ -149,6 +149,7 @@ def callback_handler(client, callback_query):
             chat_id=callback_query.message.chat.id,
             text=f"Cast:\n{cast_info}"
         )
+        pass
     elif callback_data.startswith("episodes:"):
         tv_show_id = callback_data.split(":")[1]
         episodes = tv.seasons(tv_show_id)
@@ -157,6 +158,7 @@ def callback_handler(client, callback_query):
             chat_id=callback_query.message.chat.id,
             text=f"Episodes:\n{episode_info}"
         )
+        pass
     elif callback_data.startswith("similar:"):
         tv_show_id = callback_data.split(":")[1]
         similar_shows = tv.similar(tv_show_id)
@@ -165,6 +167,7 @@ def callback_handler(client, callback_query):
             chat_id=callback_query.message.chat.id,
             text=f"Similar Shows:\n{similar_info}"
         )
+        pass
     elif callback_data.startswith("info:"):
         tv_show_id = callback_data.split(":")[1]
         tv_show = tv.details(tv_show_id)
