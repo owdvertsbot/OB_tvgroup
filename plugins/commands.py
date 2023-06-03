@@ -138,8 +138,14 @@ def tv_show_info(client, message):
             reply_markup=inline_keyboard
         )
 
-@Client.on_callback_query()
+        # Print debug information
+        print(f"TV Show Name: {show_name}")
+        print(f"TMDB Search Results: {search_results}")
+        print(f"Poster URL: {poster_url}")
+        print(f"Response: {response}")
 
+
+@Client.on_callback_query()
 def callback_handler(client: Client, callback_query: CallbackQuery):
     callback_data = callback_query.data
 
@@ -154,6 +160,12 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=f"Cast:\n{cast_info}"
             )
+
+            # Print debug information
+            print(f"TV Show ID (Cast): {tv_show_id}")
+            print(f"TMDB Cast: {cast}")
+            print(f"Cast Info: {cast_info}")
+
         except Exception as e:
             # Handle the TMDB API error
             error_message = f"Failed to retrieve cast information: {str(e)}"
@@ -161,6 +173,10 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=error_message
             )
+
+            # Print debug information
+            print(f"Cast Error: {str(e)}")
+
 
     elif callback_data.startswith("episodes:"):
         tv_show_id = callback_data.split(":")[1]
@@ -173,6 +189,12 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=f"Episodes:\n{episode_info}"
             )
+
+            # Print debug information
+            print(f"TV Show ID (Episodes): {tv_show_id}")
+            print(f"TMDB Episodes: {episodes}")
+            print(f"Episode Info: {episode_info}")
+
         except Exception as e:
             # Handle the TMDB API error
             error_message = f"Failed to retrieve episode information: {str(e)}"
@@ -180,6 +202,10 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=error_message
             )
+
+            # Print debug information
+            print(f"Episode Error: {str(e)}")
+
 
     elif callback_data.startswith("similar:"):
         tv_show_id = callback_data.split(":")[1]
@@ -192,6 +218,12 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=f"Similar Shows:\n{similar_info}"
             )
+
+            # Print debug information
+            print(f"TV Show ID (Similar): {tv_show_id}")
+            print(f"TMDB Similar Shows: {similar_shows}")
+            print(f"Similar Info: {similar_info}")
+
         except Exception as e:
             # Handle the TMDB API error
             error_message = f"Failed to retrieve similar shows information: {str(e)}"
@@ -199,6 +231,10 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=error_message
             )
+
+            # Print debug information
+            print(f"Similar Error: {str(e)}")
+
 
     elif callback_data.startswith("info:"):
         tv_show_id = callback_data.split(":")[1]
@@ -213,6 +249,12 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=f"Additional Information:\n{info}"
             )
+
+            # Print debug information
+            print(f"TV Show ID (Info): {tv_show_id}")
+            print(f"TMDB TV Show: {tv_show}")
+            print(f"Additional Info: {info}")
+
         except Exception as e:
             # Handle the TMDB API error
             error_message = f"Failed to retrieve additional information: {str(e)}"
@@ -220,6 +262,9 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
                 chat_id=callback_query.message.chat.id,
                 text=error_message
             )
+
+            # Print debug information
+            print(f"Info Error: {str(e)}")
 
 def show_overview_inline_keyboard(tv_show_id):
     keyboard = [
