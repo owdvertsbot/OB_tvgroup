@@ -107,6 +107,8 @@ tmdb = TMDb()
 tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
 tv = TV()
 
+from pyrogram.types import InputMediaPhoto
+
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
@@ -115,14 +117,19 @@ def tv_show_info(client, message):
     search_results = tv.search(show_name)
     if len(search_results) == 0:
         response = "Sorry, I couldn't find any information about that TV show."
+        client.send_message(chat_id=message.chat.id, text=response)
     else:
         tv_show = search_results[0]
         poster_url = f"https://image.tmdb.org/t/p/w1280{tv_show.backdrop_path}"
-        response = f"Title: {tv_show.name}\n"
-        response += f"Overview: {tv_show.overview}\n"
-        response += f"First Air Date: {tv_show.first_air_date}\n"
-        response += f"Vote Average: {tv_show.vote_average}\n"
-        response += f"Poster: [Poster]({poster_url})\n"
+        caption = f"Title: {tv_show.name}\n"
+        caption += f"Overview: {tv_show.overview}\n"
+        caption += f"First Air Date: {tv_show.first_air_date}\n"
+        caption += f"Vote Average: {tv_show.vote_average}\n"
 
-    client.send_message(chat_id=message.chat.id, text=response)
-        
+        client.send_media_group(
+            chat_id=message.chat.id,
+            media=[
+                InputMediaPhoto(media=poster_url, caption=caption)
+            ]
+        )
+
