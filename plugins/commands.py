@@ -141,92 +141,85 @@ def tv_show_info(client, message):
 @Client.on_callback_query()
 
 def callback_handler(client: Client, callback_query: CallbackQuery):
-
     callback_data = callback_query.data
 
     if callback_data.startswith("cast:"):
-
         tv_show_id = callback_data.split(":")[1]
-
-        # Retrieve the TV show cast using the TMDB API
-
-        cast = tmdb.get_tv_show_cast(tv_show_id)
-
-        cast_info = "\n".join([f"{actor['name']} as {actor['character']}" for actor in cast])
-
-        # Send the cast information as a message
-
-        client.send_message(
-
-            chat_id=callback_query.message.chat.id,
-
-            text=f"Cast:\n{cast_info}"
-
-        )
+        try:
+            # Retrieve the TV show cast using the TMDB API
+            cast = tmdb.get_tv_show_cast(tv_show_id)
+            cast_info = "\n".join([f"{actor['name']} as {actor['character']}" for actor in cast])
+            # Send the cast information as a message
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=f"Cast:\n{cast_info}"
+            )
+        except Exception as e:
+            # Handle the TMDB API error
+            error_message = f"Failed to retrieve cast information: {str(e)}"
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=error_message
+            )
 
     elif callback_data.startswith("episodes:"):
-
         tv_show_id = callback_data.split(":")[1]
-
-        # Retrieve the TV show episodes using the TMDB API
-
-        episodes = tmdb.get_tv_show_episodes(tv_show_id)
-
-        episode_info = "\n".join([f"Season {episode['season_number']}, Episode {episode['episode_number']}: {episode['name']}" for episode in episodes])
-
-        # Send the episode information as a message
-
-        client.send_message(
-
-            chat_id=callback_query.message.chat.id,
-
-            text=f"Episodes:\n{episode_info}"
-
-        )
+        try:
+            # Retrieve the TV show episodes using the TMDB API
+            episodes = tmdb.get_tv_show_episodes(tv_show_id)
+            episode_info = "\n".join([f"Season {episode['season_number']}, Episode {episode['episode_number']}: {episode['name']}" for episode in episodes])
+            # Send the episode information as a message
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=f"Episodes:\n{episode_info}"
+            )
+        except Exception as e:
+            # Handle the TMDB API error
+            error_message = f"Failed to retrieve episode information: {str(e)}"
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=error_message
+            )
 
     elif callback_data.startswith("similar:"):
-
         tv_show_id = callback_data.split(":")[1]
-
-        # Retrieve similar TV shows using the TMDB API
-
-        similar_shows = tmdb.get_similar_tv_shows(tv_show_id)
-
-        similar_info = "\n".join([show['name'] for show in similar_shows])
-
-        # Send the similar shows information as a message
-
-        client.send_message(
-
-            chat_id=callback_query.message.chat.id,
-
-            text=f"Similar Shows:\n{similar_info}"
-
-        )
+        try:
+            # Retrieve similar TV shows using the TMDB API
+            similar_shows = tmdb.get_similar_tv_shows(tv_show_id)
+            similar_info = "\n".join([show['name'] for show in similar_shows])
+            # Send the similar shows information as a message
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=f"Similar Shows:\n{similar_info}"
+            )
+        except Exception as e:
+            # Handle the TMDB API error
+            error_message = f"Failed to retrieve similar shows information: {str(e)}"
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=error_message
+            )
 
     elif callback_data.startswith("info:"):
-
         tv_show_id = callback_data.split(":")[1]
-
-        # Retrieve additional information about the TV show using the TMDB API
-
-        tv_show = tmdb.get_tv_show_details(tv_show_id)
-
-        info = f"Network: {tv_show['networks'][0]['name']}\n" if tv_show['networks'] else ""
-
-        info += f"Streaming Service: {tv_show['streaming_info']['name']}\n" if tv_show['streaming_info'] else ""
-
-        info += f"Website: {tv_show['homepage']}\n" if tv_show['homepage'] else ""
-
-        # Send the additional information as a message
-
-        client.send_message(
-
-            chat_id=callback_query.message.chat.id,
-
-            text=f"Additional Information:\n{info}"
-
-        )
+        try:
+            # Retrieve additional information about the TV show using the TMDB API
+            tv_show = tmdb.get_tv_show_details(tv_show_id)
+            info = f"Network: {tv_show['networks'][0]['name']}\n" if tv_show['networks'] else ""
+            info += f"Streaming Service: {tv_show['streaming_info']['name']}\n" if tv_show['streaming_info'] else ""
+            info += f"Website: {tv_show['homepage']}\n" if tv_show['homepage'] else ""
+            # Send the additional information as a message
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=f"Additional Information:\n{info}"
+            )
+        except Exception as e:
+            # Handle the TMDB API error
+            error_message = f"Failed to retrieve additional information: {str(e)}"
+            client.send_message(
+                chat_id=callback_query.message.chat.id,
+                text=error_message
+            )
 
 def show_overview_inline_keyboard(tv_show_id):
     keyboard = [
