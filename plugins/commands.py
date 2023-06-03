@@ -110,7 +110,7 @@ tv = TV()
 
 # Handler for text messages
 @Client.on_message(filters.text)
-async def tv_show_info(client, message):
+def tv_show_info(client, message):
     show_name = message.text
 
     # Search for the TV show using the TMDB API
@@ -128,17 +128,16 @@ async def tv_show_info(client, message):
 
         # Generate inline keyboard
         inline_keyboard = show_overview_inline_keyboard(tv_show.id)
-        await client.send_photo(
+        client.send_photo(
             chat_id=message.chat.id,
             photo=poster_url,
             caption=response,
             reply_markup=inline_keyboard
         )
 
-
 # Handler for callback queries
 @Client.on_callback_query()
-async def cb_handler(client, query):
+def callback_handler(client, callback_query):
     callback_data = callback_query.data
     if callback_data.startswith("cast:"):
         tv_show_id = callback_data.split(":")[1]
@@ -147,7 +146,7 @@ async def cb_handler(client, query):
         # Format the cast information
         cast_info = "\n".join([f"{actor.name} as {actor.character}" for actor in cast])
         # Send the cast information as a message
-        await client.send_message(
+        client.send_message(
             chat_id=callback_query.message.chat.id,
             text=f"Cast:\n{cast_info}"
         )
@@ -158,7 +157,7 @@ async def cb_handler(client, query):
         # Format the episode information
         episode_info = "\n".join([f"Season {episode.season_number}, Episode {episode.episode_number}: {episode.name}" for episode in episodes])
         # Send the episode information as a message
-        await client.send_message(
+        client.send_message(
             chat_id=callback_query.message.chat.id,
             text=f"Episodes:\n{episode_info}"
         )
@@ -169,7 +168,7 @@ async def cb_handler(client, query):
         # Format the similar shows information
         similar_info = "\n".join([show.name for show in similar_shows])
         # Send the similar shows information as a message
-        await client.send_message(
+        client.send_message(
             chat_id=callback_query.message.chat.id,
             text=f"Similar Shows:\n{similar_info}"
         )
@@ -185,11 +184,10 @@ async def cb_handler(client, query):
         info += f"Trivia: {tv_show.trivia[0].text}\n" if tv_show.trivia else ""
         info += f"Opinions: {tv_show.opinions[0].opinion}\n" if tv_show.opinions else ""
         # Send the additional information as a message
-        await client.send_message(
+        client.send_message(
             chat_id=callback_query.message.chat.id,
             text=f"Additional Information:\n{info}"
         )
-
 
 def show_overview_inline_keyboard(tv_show_id):
     # Create inline keyboard with options
@@ -203,6 +201,5 @@ def show_overview_inline_keyboard(tv_show_id):
             InlineKeyboardButton("More Info", callback_data=f"info:{tv_show_id}")
         ]
     ]
-
+    
     return InlineKeyboardMarkup(keyboard)
-
