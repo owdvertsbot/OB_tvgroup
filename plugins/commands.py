@@ -137,8 +137,8 @@ async def tv_show_info(client, message):
 
 
 # Handler for callback queries
-@Client.on_callback_query(filters.callback_query)
-async def callback_handler(client, callback_query):
+@Client.on_callback_query()
+async def cb_handler(client, query):
     callback_data = callback_query.data
     if callback_data.startswith("cast:"):
         tv_show_id = callback_data.split(":")[1]
