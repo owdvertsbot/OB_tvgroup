@@ -212,12 +212,12 @@ def show_overview_inline_keyboard(tv_show_id):
     # Create inline keyboard with options
     keyboard = [
         [
-            InlineKeyboardButton("Cast", callback_data="cast"),
-            InlineKeyboardButton("Episodes", callback_data="episodes")
+            InlineKeyboardButton("Cast", callback_data=f"cast:{tv_show_id}"),
+            InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id}")
         ],
         [
-            InlineKeyboardButton("Similar Shows", callback_data="similar"),
-            InlineKeyboardButton("More Info", callback_data="info")
+            InlineKeyboardButton("Similar Shows", callback_data=f"similar:{tv_show_id}"),
+            InlineKeyboardButton("More Info", callback_data=f"info:{tv_show_id}")
         ]
     ]
 
