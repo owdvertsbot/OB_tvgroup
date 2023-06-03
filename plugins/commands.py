@@ -7,7 +7,8 @@ import urllib.request
 import urllib.parse
 
 from datetime import datetime
-from pyrogram import filters, Client, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, enums
+from pyrogram import filters, Client, enums
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from io import BytesIO
@@ -136,7 +137,7 @@ async def tv_show_info(client, message):
 
 
 # Handler for callback queries
-@Client.on_callback_query()
+@Client.on_callback_query(filters.callback_query)
 async def callback_handler(client, callback_query):
     callback_data = callback_query.data
     if callback_data.startswith("cast:"):
@@ -204,3 +205,4 @@ def show_overview_inline_keyboard(tv_show_id):
     ]
 
     return InlineKeyboardMarkup(keyboard)
+
