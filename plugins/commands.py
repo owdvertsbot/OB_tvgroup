@@ -10,7 +10,7 @@ from datetime import datetime
 from pyrogram import filters
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from script import Script
@@ -107,8 +107,6 @@ tmdb = TMDb()
 tmdb.api_key = "9555335f868ed5bce03a57c35fa9da19"
 tv = TV()
 
-from pyrogram.types import InputMediaPhoto
-
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
@@ -117,19 +115,34 @@ def tv_show_info(client, message):
     search_results = tv.search(show_name)
     if len(search_results) == 0:
         response = "Sorry, I couldn't find any information about that TV show."
-        client.send_message(chat_id=message.chat.id, text=response)
     else:
         tv_show = search_results[0]
         poster_url = f"https://image.tmdb.org/t/p/w1280{tv_show.backdrop_path}"
-        caption = f"Title: {tv_show.name}\n"
-        caption += f"Overview: {tv_show.overview}\n"
-        caption += f"First Air Date: {tv_show.first_air_date}\n"
-        caption += f"Vote Average: {tv_show.vote_average}\n"
+        
+        # Get additional information about the TV show
+        season_number = 1  # Replace with the actual season number
+        episode_number = 1  # Replace with the actual episode number
+        network_or_service = "Netflix"  # Replace with the actual network or streaming service
+        air_date_and_time = "Friday, 9:00 PM"  # Replace with the actual air date and time
+        website_url = "https://www.example.com"  # Replace with the actual URL of the TV show's website or social media page
+        quotes = "This is a memorable quote from the TV show."  # Replace with actual quotes from the TV show
+        trivia = "Interesting trivia about the TV show."  # Replace with interesting trivia about the TV show
+        opinions = "This is my opinion about the TV show."  # Replace with your opinions or user opinions about the TV show
+        
+        caption = f"**Title:** {tv_show.name}\n"
+        caption += f"**Overview:** {tv_show.overview}\n"
+        caption += f"**Season:** {season_number}\n"
+        caption += f"**Episode:** {episode_number}\n"
+        caption += f"**Network/Streaming Service:** {network_or_service}\n"
+        caption += f"**Air Date and Time:** {air_date_and_time}\n"
+        caption += f"**Website/Social Media:** [TV Show Page]({website_url})\n"
+        caption += f"**Quotes:** {quotes}\n"
+        caption += f"**Trivia:** {trivia}\n"
+        caption += f"**Opinions:** {opinions}\n"
 
-        client.send_media_group(
-            chat_id=message.chat.id,
-            media=[
-                InputMediaPhoto(media=poster_url, caption=caption)
-            ]
-        )
-
+    client.send_photo(
+        chat_id=message.chat.id,
+        photo=poster_url,
+        caption=caption,
+        reply_markup=show_overview_inline_keyboard(tv_show.id)
+    )
