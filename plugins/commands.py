@@ -228,11 +228,11 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
 
         )
 
-def show_overview_inline_keyboard(1399-game-of-thrones):
+def show_overview_inline_keyboard(tv_show_id):
     keyboard = [
         [
             InlineKeyboardButton("Cast", callback_data=f"cast:1399-game-of-thrones"),
-            InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id}")
+            InlineKeyboardButton("Episodes", callback_data=f"episodes:1399")
         ],
         [
             InlineKeyboardButton("Similar Shows", callback_data=f"similar:{tv_show_id}"),
