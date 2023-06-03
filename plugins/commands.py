@@ -110,16 +110,6 @@ tv = TV()
 
 from pyrogram.types import InputMediaPhoto
 
-url = "https://api.themoviedb.org/3/search/tv?include_adult=false&language=en-US&page=1"
-
-headers = {
-    "accept": "application/json",
-    "Authorization": "sha512-Lv3LexMFObVy+KRseUcgi4fY8ly+vD9iz+TJQaCi329MN+vCxHsik7DkGvy7dbllRB/2o7dK0qA9V0L2HLHY3Q==?LjF8"
-}
-
-response = requests.get(url, headers=headers)
-
-print(response.text)
 
 # Handler for text messages
 @Client.on_message(filters.text)
