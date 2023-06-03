@@ -228,7 +228,7 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
 
         )
 
-def show_overview_inline_keyboard('1399-game-of-thrones'):
+def show_overview_inline_keyboard(1399-game-of-thrones):
     keyboard = [
         [
             InlineKeyboardButton("Cast", callback_data=f"cast:1399-game-of-thrones"),
