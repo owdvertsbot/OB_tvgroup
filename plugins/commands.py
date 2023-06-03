@@ -110,7 +110,6 @@ tv = TV()
 from pyrogram.types import InputMediaPhoto
 
 
-# Handler for text messages
 @Client.on_message(filters.text)
 def tv_show_info(client, message):
     show_name = message.text
@@ -138,63 +137,76 @@ def tv_show_info(client, message):
         )
 
 # Handler for callback queries
-@Client.on_callback_query()
-def callback_handler(client, callback_query):
+@Client.on_callback_query(filters.regex("^cast:"))
+def cast_callback_handler(client, callback_query):
     callback_data = callback_query.data
-    print("Callback data:", callback_data)  # Add this line to check the callback data
+    tv_show_id = callback_data.split(":")[1]
 
-    if callback_data.startswith("cast:"):
-        tv_show_id = callback_data.split(":")[1]
-        print("TV show ID:", tv_show_id)  # Add this line to check the TV show ID
+    # Retrieve the cast of the TV show from the TMDB API
+    cast = tv.credits(tv_show_id).cast
 
-        # Retrieve the cast of the TV show from the TMDB API
-        cast = tv.credits(tv_show_id).cast
-        print("Cast:", cast)  # Add this line to check the retrieved cast data
+    # Format and send the cast information as a message
+    cast_info = "\n".join([f"{actor.name} as {actor.character}" for actor in cast])
+    client.send_message(
+        chat_id=callback_query.message.chat.id,
+        text=f"Cast:\n{cast_info}"
+    )
 
-        # Format and send the cast information as a message
-        cast_info = "\n".join([f"{actor.name} as {actor.character}" for actor in cast])
-        client.send_message(
-            chat_id=callback_query.message.chat.id,
-            text=f"Cast:\n{cast_info}"
-        )
-    elif callback_data.startswith("episodes:"):
-        tv_show_id = callback_data.split(":")[1]
-        # Retrieve the TV show's episodes from the TMDB API
-        episodes = tv.seasons(tv_show_id)
-        # Format the episode information
-        episode_info = "\n".join([f"Season {episode.season_number}, Episode {episode.episode_number}: {episode.name}" for episode in episodes])
-        # Send the episode information as a message
-        client.send_message(
-            chat_id=callback_query.message.chat.id,
-            text=f"Episodes:\n{episode_info}"
-        )
-    elif callback_data.startswith("similar:"):
-        tv_show_id = callback_data.split(":")[1]
-        # Retrieve similar TV shows from the TMDB API
-        similar_shows = tv.similar(tv_show_id)
-        # Format the similar shows information
-        similar_info = "\n".join([show.name for show in similar_shows])
-        # Send the similar shows information as a message
-        client.send_message(
-            chat_id=callback_query.message.chat.id,
-            text=f"Similar Shows:\n{similar_info}"
-        )
-    elif callback_data.startswith("info:"):
-        tv_show_id = callback_data.split(":")[1]
-        # Retrieve additional information about the TV show from the TMDB API
-        tv_show = tv.details(tv_show_id)
-        # Format the additional information
-        info = f"Network: {tv_show.networks[0].name}\n" if tv_show.networks else ""
-        info += f"Streaming Service: {tv_show.streaming_info.get('name', '')}\n" if tv_show.streaming_info else ""
-        info += f"Website: {tv_show.homepage}\n" if tv_show.homepage else ""
-        info += f"Quotes: {tv_show.quotes[0].quote}\n" if tv_show.quotes else ""
-        info += f"Trivia: {tv_show.trivia[0].text}\n" if tv_show.trivia else ""
-        info += f"Opinions: {tv_show.opinions[0].opinion}\n" if tv_show.opinions else ""
-        # Send the additional information as a message
-        client.send_message(
-            chat_id=callback_query.message.chat.id,
-            text=f"Additional Information:\n{info}"
-        )
+@Client.on_callback_query(filters.regex("^episodes:"))
+def episodes_callback_handler(client, callback_query):
+    callback_data = callback_query.data
+    tv_show_id = callback_data.split(":")[1]
+
+    # Retrieve the TV show's episodes from the TMDB API
+    episodes = tv.seasons(tv_show_id)
+
+    # Format the episode information
+    episode_info = "\n".join([f"Season {episode.season_number}, Episode {episode.episode_number}: {episode.name}" for episode in episodes])
+
+    # Send the episode information as a message
+    client.send_message(
+        chat_id=callback_query.message.chat.id,
+        text=f"Episodes:\n{episode_info}"
+    )
+
+@Client.on_callback_query(filters.regex("^similar:"))
+def similar_callback_handler(client, callback_query):
+    callback_data = callback_query.data
+    tv_show_id = callback_data.split(":")[1]
+
+    # Retrieve similar TV shows from the TMDB API
+    similar_shows = tv.similar(tv_show_id)
+
+    # Format the similar shows information
+    similar_info = "\n".join([show.name for show in similar_shows])
+
+    # Send the similar shows information as a message
+    client.send_message(
+        chat_id=callback_query.message.chat.id,
+        text=f"Similar Shows:\n{similar_info}"
+    )
+
+@Client.on_callback_query(filters.regex("^info:"))
+def info_callback_handler(client, callback_query):
+    callback_data = callback_query.data
+    tv_show_id = callback_data.split(":")[1]
+
+    # Retrieve additional information about the TV show from the TMDB API
+    tv_show = tv.details(tv_show_id)
+
+    # Format the additional information
+    info = f"Network: {tv_show.networks[0].name}\n" if tv_show.networks else ""
+    info += f"Streaming Service: {tv_show.streaming_info.get('name', '')}\n" if tv_show.streaming_info else ""
+    info += f"Website: {tv_show.homepage}\n" if tv_show.homepage else ""
+    info += f"Quotes: {tv_show.quotes[0].quote}\n" if tv_show.quotes else ""
+    info += f"Trivia: {tv_show.trivia[0].text}\n" if tv_show.trivia else ""
+    info += f"Opinions: {tv_show.opinions[0].opinion}\n" if tv_show.opinions else ""
+
+    # Send the additional information as a message
+    client.send_message(
+        chat_id=callback_query.message.chat.id,
+        text=f"Additional Information:\n{info}"
+    )
 
 def show_overview_inline_keyboard(tv_show_id):
     # Create inline keyboard with options
@@ -208,5 +220,5 @@ def show_overview_inline_keyboard(tv_show_id):
             InlineKeyboardButton("More Info", callback_data=f"info:{tv_show_id}")
         ]
     ]
-    
+
     return InlineKeyboardMarkup(keyboard)
