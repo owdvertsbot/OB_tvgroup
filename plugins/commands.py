@@ -117,7 +117,7 @@ def tv_show_info(client, message):
         response = "Sorry, I couldn't find any information about that TV show."
     else:
         tv_show = search_results[0]
-        poster_url = f"https://image.tmdb.org/t/p/w500{tv_show.poster_path}"
+        poster_url = f"https://image.tmdb.org/t/p/w1280{tv_show.backdrop_path}"
         response = f"Title: {tv_show.name}\n"
         response += f"Overview: {tv_show.overview}\n"
         response += f"First Air Date: {tv_show.first_air_date}\n"
@@ -125,5 +125,4 @@ def tv_show_info(client, message):
         response += f"Poster: [Poster]({poster_url})\n"
 
     client.send_message(chat_id=message.chat.id, text=response)
-
         
