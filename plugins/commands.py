@@ -269,7 +269,7 @@ def callback_handler(client: Client, callback_query: CallbackQuery):
 def show_overview_inline_keyboard(tv_show_id):
     keyboard = [
         [
-            InlineKeyboardButton("Cast", callback_data="cast:{tv_show_id"),
+            InlineKeyboardButton("Cast", callback_data=f"cast:{tv_show_id"),
             InlineKeyboardButton("Episodes", callback_data=f"episodes:{tv_show_id}")
         ],
         [
