@@ -285,3 +285,11 @@ def show_overview_inline_keyboard(tv_show_id):
     ]
     
     return InlineKeyboardMarkup(keyboard)
+
+@Client.on_message()
+async def handle_message(message):
+  if message.text.startswith("/get_tv_show_info"):
+    tv_show_id = message.text.split(" ")[1]
+    tv_show = get_tv_show_info(tv_show_id)
+    await message.reply(tv_show.name + " (" + tv_show.release_date + ")")
+
