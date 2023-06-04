@@ -104,6 +104,12 @@ async def start(client, message):
             pass
 
 
+API_KEY = '1b6efd5d894b8330c8720e539d8f36dc'
+session_id = requests.post('https://api.themoviedb.org/3/authentication/session/create', data={
+    'api_key': API_KEY
+}).json()['session_id']
+print(session_id)
+
 tmdb = TMDb()
 tmdb.api_key = "1b6efd5d894b8330c8720e539d8f36dc"
 tv = TV()
