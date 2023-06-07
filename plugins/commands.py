@@ -5,20 +5,20 @@ import time
 import shutil
 import urllib.request
 import urllib.parse
-import requests
 
 from datetime import datetime
-from pyrogram import filters, Client, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
+from pyrogram import filters
+from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
-from io import BytesIO
-from tmdbv3api import TMDb, TV
 
 from script import Script
 from info import SAVE_USER, PICS
+from plugins.helpers import humanbytes
 from database.filters_mdb import filter_stats
 from database.users_mdb import add_user, find_user, all_users
+
 
 @Client.on_message(filters.command('id'))
 async def showid(client, message):
@@ -65,6 +65,9 @@ async def showid(client, message):
         )
 
 
+import urllib.request
+from io import BytesIO
+
 @Client.on_message(filters.command('start') & filters.private)
 async def start(client, message):
     with urllib.request.urlopen("https://i.ibb.co/t8LdJwf/PICS.jpg") as url:
@@ -74,19 +77,15 @@ async def start(client, message):
         photo=buffer,
         caption=Script.START_MSG.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
-                ],
-                [
-                    InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
-                    InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
-                ],
-                [
-                    InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
-                    InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
-                ]
-            ]
+            [[
+                InlineKeyboardButton("ᴊᴏɪɴ ᴛʜᴇ ᴍᴀɪɴ ᴄʜᴀɴɴᴇʟ", url="https://t.me/OB_LINK")
+            ],[
+                InlineKeyboardButton("ʜᴇʟᴘ", callback_data="help_data"),
+                InlineKeyboardButton("ᴀʙᴏᴜᴛ", callback_data="about_data")
+            ],[
+                InlineKeyboardButton("ɢʀᴏᴜᴘ", url="https://t.me/OB_SERIESGROUP"),
+                InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close_data")
+            ]]
         ),
         parse_mode=enums.ParseMode.HTML,
         quote=True
@@ -102,9 +101,3 @@ async def start(client, message):
             )
         except:
             pass
-
-
-
-
-
-
